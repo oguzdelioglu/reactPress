@@ -9,7 +9,7 @@ const router = [
         element: <Home></Home>
     },
     {
-        path: '/post',
+        path: '/post/:post_link',
         name: 'Post',
         element: <Post></Post>
     },

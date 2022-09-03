@@ -31,12 +31,13 @@ export const getSettings = async () => {
   return settingList[0];
 }
 
-export const fetchPost = async () => {
+export const fetchPost = async (post_link) => {
 
   const postCol = collection(db, 'posts');
   const postSnapshot = await getDocs(postCol);
   const postList = postSnapshot.docs.map(doc => doc.data());
-  return postList;
+  const post = postList.filter(p=> p.post_link === post_link).shift()
+  return post;
   // const postList = await collection(db,'posts').where('post_link', '==', 'denemekonusu').get();
   // postList.forEach(doc => {
   //   console.log(doc.id, '=>', doc.data());

@@ -21,7 +21,6 @@ export default class Container extends Component {
         }
         </Routes>
       </Router>
-      deneme
       {/* <div className="post-listing archive-box">
         
       </div> */}
