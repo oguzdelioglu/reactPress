@@ -3,18 +3,18 @@ import React, { Component } from 'react'
 export default class Header extends Component {
   render() {
     return (
-        <header id="theme-header" classname="theme-header">
+        <header id="theme-header" className="theme-header">
           <div className="header-content">
             {/* eslint-disable-next-line */}
             <a title="Menu" id="slide-out-open" className="slide-out-open" href="#"><span /></a>
             <div className="search-block">
               <form method="get" id="searchform-header" action="search">
                 <button aria-label="search-button" className="search-button" type="submit" placeholder="Search"><i className="fa fa-search" /></button>
-                <input className="search-live" type="text" id="s-header" name="q" title="Search" placeholder="Search" minLength={3} maxLength={20} required onfocus="if (this.value == 'Search') {this.value = '';}" onblur="if (this.value == '') {this.placeholder = 'Search';}" />
+                <input className="search-live" type="text" id="s-header" name="q" title="Search" placeholder="Search" minLength={3} maxLength={20} required onFocus={this.value === 'Search' ? this.value = '' : null} onBlur={this.value === '' ? this.placeholder = 'Search': null} />
               </form>
             </div>
             <div className="logo">
-              <h1> <a rel="home" title href="/">
+              <h1> <a rel="home" href="/">
                   {/* eslint-disable-next-line */}
                   <img src="/css/images/logo.png" width="175" height="44" /><strong />
                 </a>

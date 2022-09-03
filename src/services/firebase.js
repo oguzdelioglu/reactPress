@@ -4,6 +4,7 @@ import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
 // eslint-disable-next-line
 import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
+import { updatePaginationPosts } from "../stores/pagination";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -21,23 +22,54 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-// eslint-disable-next-line
-// const analytics = getAnalytics(app);
 const db = getFirestore(app);
 
-// Get a list of Settings from your database
-// async function getSettings(db) {
-//     const settingsCol = collection(db, 'settings');
-//     const settingSnapshot = await getDocs(settingsCol);
-//     const settingList = settingSnapshot.docs.map(doc => doc.data());
-//     return settingList;
-// }
+export const getSettings = async () => {
+  const settingsCol = collection(db, 'settings');
+  const settingSnapshot = await getDocs(settingsCol);
+  const settingList = settingSnapshot.docs.map(doc => doc.data());
+  return settingList[0];
+}
 
-export default db;
-export var getSettings = async (db)=> {
-    console.log("DB>>",db)
-    const settingsCol = collection(db, 'settings');
-    const settingSnapshot = await getDocs(settingsCol);
-    const settingList = settingSnapshot.docs.map(doc => doc.data());
-    return settingList;
+export const fetchPost = async () => {
+
+  const postCol = collection(db, 'posts');
+  const postSnapshot = await getDocs(postCol);
+  const postList = postSnapshot.docs.map(doc => doc.data());
+  return postList;
+  // const postList = await collection(db,'posts').where('post_link', '==', 'denemekonusu').get();
+  // postList.forEach(doc => {
+  //   console.log(doc.id, '=>', doc.data());
+  // });
+
+  // const query = collection(db,'posts')
+  // const postSnapshot = await getDocs(query);
+  // const postList = postSnapshot.docs.map(doc => doc.data());
+  // .where('post_link', '==', 'denemekonusu')
+
+  // ..
+ //this.setState({postList})
+}
+
+export const fetchPosts = async (posts,postPerPage,dispatch) => {
+  // State.
+  // const { posts, postPerPage} = state
+
+  // Last Visible.
+  const lastVisible = posts && posts.docs[posts.docs.length - 1]
+  console.log("lastVisible:",lastVisible)
+  // Query.
+  const query = collection(db,'posts')
+    .orderBy('post_date')
+    .startAfter(lastVisible)
+    .limit(postPerPage)
+
+  // Posts.
+  const postList = await query.get()
+
+  console.log("Sonuç",postList)
+
+  // ..
+  return postList //this.setState({postList})
+  //return dispatch(updatePaginationPosts(postList)) //this.setState({postList})
 }

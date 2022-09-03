@@ -26,7 +26,7 @@ export default class Sidebar extends Component {
               </div>
               <div className="widget-container">
                 <ul>
-                <li class="cat-item"><a rel="category" href="/category/">tag_name (pinCount)</a></li>
+                <li className="cat-item"><a rel="category" href="/category/">tag_name (pinCount)</a></li>
                   ?&gt;
                 </ul>
               </div>

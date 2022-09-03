@@ -12,30 +12,27 @@ import Sidebar from './components/Sidebar';
 import { updateMetadata } from './stores/metadata';
 
 //Firebase Database
-import db,{getSettings} from './services/firebase';
+import { getSettings } from './services/firebase';
 
-import React, { Component, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 export default function App() {
-
-const meta = useSelector((state) => state.meta.value)
-const dispatch = useDispatch()
-
-function getHeader() {
-  getSettings(db).then(result => {
-    console.log("Sonuç.",result);
-    var settings = result[0];
-    console.log("Meta.",settings.meta);
-    dispatch(updateMetadata(settings));
-  })
-}
+  const meta = useSelector((state) => state.meta.value)
+  const dispatch = useDispatch()
 
   useEffect(() => {
-      getHeader();
-  },[])
+    //First load metadata settings
+    
+    // getSettings().then((settings) => {
+    //   console.log(settings);
+    //   dispatch(updateMetadata(settings));
+    //   return settings;
+    // });
+
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div class="root">
+    <div className="root">
     <DocumentMeta {...meta}></DocumentMeta>
     <Header></Header>
     <Sidebar></Sidebar>
