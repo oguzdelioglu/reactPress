@@ -9,7 +9,7 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import Pagination from './components/Pagination';
 import Sidebar from './components/Sidebar';
-import { updateMetadata } from './stores/metadata';
+import { updateMetadata } from './stores/global';
 
 //Firebase Database
 import { getSettings } from './services/firebase';
@@ -17,7 +17,7 @@ import { getSettings } from './services/firebase';
 import React, { useEffect } from 'react'
 
 export default function App() {
-  const meta = useSelector((state) => state.meta.value)
+  const meta = useSelector((state) => state.global.meta)
   const dispatch = useDispatch()
 
   useEffect(() => {

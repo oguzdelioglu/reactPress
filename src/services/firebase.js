@@ -1,15 +1,10 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-// import { getDatabase } from "firebase/database";
-// import { getAnalytics } from "firebase/analytics";
 // eslint-disable-next-line
 import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
-import { updatePaginationPosts } from "../stores/pagination";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { updatePaginationPosts } from "../stores/posts";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+
 const firebaseConfig = {
   apiKey: "AIzaSyCJ7DLBntXHYdsX2EkLFX19ogvwe7lcq9g",
   authDomain: "edelsteineinformationen.firebaseapp.com",
@@ -25,31 +20,26 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 export const getSettings = async () => {
-  const settingsCol = collection(db, 'settings');
-  const settingSnapshot = await getDocs(settingsCol);
-  const settingList = settingSnapshot.docs.map(doc => doc.data());
-  return settingList[0];
+  const Col = collection(db, 'settings');
+  const Snapshot = await getDocs(Col);
+  const List = Snapshot.docs.map(doc => doc.data());
+  return List[0];
 }
 
-export const fetchPost = async (post_link) => {
+export const fetchCategories = async () => {
+  const Col = collection(db, 'categories');
+  const Snapshot = await getDocs(Col);
+  const List = Snapshot.docs.map(doc => Object.assign(doc.data(),{"id":doc.id}));
+  console.log("Kategoriler:",List)
+  return List;
+}
 
-  const postCol = collection(db, 'posts');
-  const postSnapshot = await getDocs(postCol);
-  const postList = postSnapshot.docs.map(doc => doc.data());
-  const post = postList.filter(p=> p.post_link === post_link).shift()
+export const fetchPost = async (post_url) => {
+  const Col = collection(db, 'posts');
+  const Snapshot = await getDocs(Col);
+  const List = Snapshot.docs.map(doc => doc.data());
+  const post = List.filter(p=> p.post_link === post_url).shift()
   return post;
-  // const postList = await collection(db,'posts').where('post_link', '==', 'denemekonusu').get();
-  // postList.forEach(doc => {
-  //   console.log(doc.id, '=>', doc.data());
-  // });
-
-  // const query = collection(db,'posts')
-  // const postSnapshot = await getDocs(query);
-  // const postList = postSnapshot.docs.map(doc => doc.data());
-  // .where('post_link', '==', 'denemekonusu')
-
-  // ..
- //this.setState({postList})
 }
 
 export const fetchPosts = async (posts,postPerPage,dispatch) => {

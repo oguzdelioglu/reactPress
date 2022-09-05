@@ -3,9 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 export const postSlice = createSlice({
   name: 'post',
   initialState: {
-    post : {
-      pin_title: "Deneme 35"
-    },
+    post: {},
   },
   reducers: {
     updatePost: (state, action) => {

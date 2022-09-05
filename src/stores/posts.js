@@ -7,13 +7,13 @@ export const paginationSlice = createSlice({
     postPerPage: 10,
   },
   reducers: {
-    updatePaginationPosts: (state, action) => {
+    updatePosts: (state, action) => {
       state.value = action.payload
     },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { updatePaginationPosts } = paginationSlice.actions
+export const { updatePosts } = paginationSlice.actions
 
 export default paginationSlice.reducer
