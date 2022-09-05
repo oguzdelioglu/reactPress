@@ -18,6 +18,7 @@ export default function Post() {
     return category
   }
 
+  //Get Post Data
   useEffect(() => {
     console.log("Post Link ->",post_url)
     fetchPost(post_url).then(data => {
@@ -29,6 +30,8 @@ export default function Post() {
     //dispatch(updatePost(data))
   },[post_url]);
 
+
+  //Metadata Update After Post data received
   useEffect(()=> {
     if(post && post.pin_title) {
       const meta =  {

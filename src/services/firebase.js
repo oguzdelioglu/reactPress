@@ -1,7 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 // eslint-disable-next-line
-import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
+// import * as firestore from 'firebase/firestore';
+import { getFirestore, collection, getDocs,query,orderBy,limit,startAt,where, startAfter } from 'firebase/firestore';
 import { updatePaginationPosts } from "../stores/posts";
 
 
@@ -42,25 +43,16 @@ export const fetchPost = async (post_url) => {
   return post;
 }
 
-export const fetchPosts = async (posts,postPerPage,dispatch) => {
-  // State.
-  // const { posts, postPerPage} = state
-
-  // Last Visible.
-  const lastVisible = posts && posts.docs[posts.docs.length - 1]
-  console.log("lastVisible:",lastVisible)
-  // Query.
-  const query = collection(db,'posts')
-    .orderBy('post_date')
-    .startAfter(lastVisible)
-    .limit(postPerPage)
-
-  // Posts.
-  const postList = await query.get()
-
-  console.log("Sonuç",postList)
-
-  // ..
-  return postList //this.setState({postList})
-  //return dispatch(updatePaginationPosts(postList)) //this.setState({postList})
+export const fetchPosts = async (lastVisible,postPerPage) => {
+  console.log("lastVisible",lastVisible)
+  console.log("postPerPage",postPerPage)
+  
+  const ref = collection(db,'posts')
+  const q = query(ref,orderBy("post_date"),startAfter(lastVisible),limit(postPerPage));
+  const querySnapshot = await getDocs(q);
+  const postList = []
+  querySnapshot.forEach((doc) => {
+    postList.push(Object.assign(doc.data(),{"id":doc.id}))
+  });
+  return postList
 }

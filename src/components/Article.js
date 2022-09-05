@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
-export default function Article() {
+export default function Article({post}) {
+  useEffect(()=> {
+    console.log("Konu İçeriği:",post)
+  },[])
   return (
       <article className="item-list tie_lightbox">
           <h2 className="post-box-title">
-            <a href="/post/postlink">Başlık</a>
+            <a href={"/post/" + post.post_link}>{post.pin_title}</a>
           </h2>
           <p className="post-meta">
             <span className="post-cats"><i className="fa fa-folder" /><a href="/category/category_slug" rel="category">category</a></span>
@@ -15,7 +18,7 @@ export default function Article() {
             </a>
           </div>
           <div className="entry">
-            <p>pintitle
+            <p>{post.pin_title}
             </p>
             <a className="more-link" href="/post/post_link">Read More »</a>
           </div>

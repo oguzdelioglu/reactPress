@@ -1,19 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-export const paginationSlice = createSlice({
+export const postsSlice = createSlice({
   name: 'pagination',
   initialState: {
-    posts : {},
+    posts : [],
     postPerPage: 10,
   },
   reducers: {
     updatePosts: (state, action) => {
-      state.value = action.payload
+      state.posts = action.payload
     },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { updatePosts } = paginationSlice.actions
+export const { updatePosts } = postsSlice.actions
 
-export default paginationSlice.reducer
+export default postsSlice.reducer
