@@ -8,7 +8,8 @@ export const postsSlice = createSlice({
   },
   reducers: {
     updatePosts: (state, action) => {
-      state.posts = action.payload
+      console.log("Payload:",action.payload)
+      state.posts.posts.push(action.payload)
     },
   },
 })

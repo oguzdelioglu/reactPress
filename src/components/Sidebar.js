@@ -1,5 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 export default function Sidebar() {
   const categories = useSelector((state) => state.global.categories)
@@ -16,7 +17,7 @@ export default function Sidebar() {
         </div>
         <div className="widget">
           <div className="post-thumbnail">
-            <a rel="bookmark" href="/post/post_link" title="pin_title"><img width="350" height="350" src="imglink" className="attachment-tie-medium size-tie-medium wp-post-image" alt="" /><span className="fa overlay-icon" /></a>
+            <a rel="bookmark" href="/post/post_link" title="pin_title"><img width="350" height="350" src="https://gemstonejewelrybuy.com/uploads/350x350/boho-turquoise-long-beaded-necklace-for-women-vintage-ethnic-B07Q37D8RM.jpg" className="attachment-tie-medium size-tie-medium wp-post-image" alt="" /><span className="fa overlay-icon" /></a>
           </div>
           <h3><a rel="bookmark" href="/post/post_link">Postlink</a></h3>
         </div>
@@ -30,7 +31,7 @@ export default function Sidebar() {
           <ul>
             {
               categories.map((category,index)=> (
-                <li key={index} className="cat-item"><a rel="category" href={"/category/" + category.slug}>{category.name}</a></li>
+                <li key={index} className="cat-item"><Link rel="category" to={process.env.REACT_APP_CATEGORY_PREFIX + category.slug}>{category.name}</Link></li>
               ))
             }
           
@@ -48,7 +49,7 @@ export default function Sidebar() {
             <div className="widget">
               <h2 className="widget-title">Tags</h2>
               <div className="widget-tags">
-                <a className="tag-cloud-link" rel="nofollow" href="/search/tag_name" style={{fontSize: '12pt'}}>tag_name</a>
+                <a className="tag-cloud-link" rel="nofollow" href={process.env.REACT_APP_SEARCH_PREFIX + "tagname"} style={{fontSize: '12pt'}}>tag_name</a>
               </div>
             </div>
           </div>

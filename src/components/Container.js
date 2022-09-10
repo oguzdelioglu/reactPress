@@ -5,13 +5,13 @@ import {
   Route,
 } from "react-router-dom";
 import router from '../router'
+import Sidebar from './Sidebar';
 export default class Container extends Component {
   
   render() {
     return (
   <div id="main-content" className="container">
     <div className="content">
-      <Router>
         <Routes>
         {
           router.map((route,key) => (
@@ -20,11 +20,8 @@ export default class Container extends Component {
           )
         }
         </Routes>
-      </Router>
-      {/* <div className="post-listing archive-box">
-        
-      </div> */}
     </div>
+    <Sidebar></Sidebar>
     <div className="clear" />
   </div>
     )

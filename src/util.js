@@ -1,3 +1,5 @@
+import store from './stores'
+
 export function slugify(string) {
     const a = 'àáâäæãåāăąçćčđďèéêëēėęěğǵḧîïíīįìıİłḿñńǹňôöòóœøōõőṕŕřßśšşșťțûüùúūǘůűųẃẍÿýžźż·/_,:;'
     const b = 'aaaaaaaaaacccddeeeeeeeegghiiiiiiiilmnnnnoooooooooprrsssssttuuuuuuuuuwxyyzzz------'
@@ -13,4 +15,13 @@ export function slugify(string) {
       .replace(/\-\-+/g, '-') // Replace multiple - with single -
       .replace(/^-+/, '') // Trim - from start of text
       .replace(/-+$/, '') // Trim - from end of text
+  }
+
+  export function getCategory(id) {
+    // console.log("Aranan Kategori ID:",id)
+    const categories = store.getState().global.categories;//useSelector((state) => state.global.categories)
+    // console.log("Kategoriler",categories)
+    const category = categories.filter((category) => category.id === id).pop()
+    // console.log("Bulunan Kategori:",category)
+    return category
   }

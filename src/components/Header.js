@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { fetchCategories } from '../services/firebase'
 import { updateCategories } from '../stores/global'
 
@@ -26,10 +27,10 @@ export default function Header() {
               </form>
             </div>
             <div className="logo">
-              <h1> <a rel="home" href="/">
+              <h1> <Link rel="home" to="/">
                   {/* eslint-disable-next-line */}
                   <img src="/css/images/logo.png" width="175" height="44" /><strong />
-                </a>
+                </Link>
               </h1>
             </div>
             <div className="clear" />
@@ -38,10 +39,10 @@ export default function Header() {
             <div className="container">
               <div className="main-menu">
                 <ul id="menu-ana-menu" className="menu">
-                  <li id="menu-item-1" className="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-home"><a rel="home" href="/">Home</a></li>
+                  <li id="menu-item-1" className="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-home"><Link rel="home" to="/">Home</Link></li>
                   {
                     categories.map((category,index) => 
-                      <li key={index + 2} id={'menu-item-' + (index + 2)} className={'menu-item menu-item-type-post_type menu-item-object-page menu-item-' + index}><a style={{textTransform: 'capitalize'}} rel="category" href={'/category/' + category.slug}><i className="fa fa-folder" />{category.name}</a></li>
+                      <li key={index + 2} id={'menu-item-' + (index + 2)} className={'menu-item menu-item-type-post_type menu-item-object-page menu-item-' + index}><Link style={{textTransform: 'capitalize'}} rel="category" to={'/category/' + category.slug}><i className="fa fa-folder" />{category.name}</Link></li>
                     )
                   }
                 </ul>

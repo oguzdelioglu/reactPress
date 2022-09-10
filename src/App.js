@@ -1,5 +1,11 @@
 import { useSelector, useDispatch } from 'react-redux'
 
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from "react-router-dom";
+
 //MetaData
 import DocumentMeta from 'react-document-meta';
 
@@ -33,12 +39,13 @@ export default function App() {
 
   return (
     <div className="root">
-    <DocumentMeta {...meta}></DocumentMeta>
-    <Header></Header>
-    <Sidebar></Sidebar>
-    <Container></Container>
-    <Pagination></Pagination>
-    <Footer></Footer>
+    <Router>
+      <DocumentMeta {...meta}></DocumentMeta>
+      <Header></Header>
+      <Container></Container>
+      <Pagination></Pagination>
+      <Footer></Footer>
+    </Router>
   </div>
   )
 }

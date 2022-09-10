@@ -1,3 +1,5 @@
+import store from '../stores'
+
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 // eslint-disable-next-line
@@ -43,16 +45,20 @@ export const fetchPost = async (post_url) => {
   return post;
 }
 
-export const fetchPosts = async (lastVisible,postPerPage) => {
+export const fetchPosts = async (lastVisible) => {
+  const postPerPage = store.getState().global.postPerPage
   console.log("lastVisible",lastVisible)
   console.log("postPerPage",postPerPage)
   
   const ref = collection(db,'posts')
-  const q = query(ref,orderBy("post_date"),startAfter(lastVisible),limit(postPerPage));
+  const q = query(ref,orderBy("date"),startAfter(lastVisible),limit(postPerPage));
   const querySnapshot = await getDocs(q);
   const postList = []
   querySnapshot.forEach((doc) => {
-    postList.push(Object.assign(doc.data(),{"id":doc.id}))
-  });
+    const dataReplaced = doc.data()
+    postList.push(Object.assign(dataReplaced,
+    {"id":doc.id,//DATA DOCUMENT ID
+    "date": doc.data().date.toDate().toISOString().substring(0,10)})) //TIMESTAMP REPLACE
+    });
   return postList
 }
