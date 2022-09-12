@@ -6,8 +6,8 @@ export default function Article({post}) {
     return getCategory(post.category);
   }
   useEffect(()=> {
-    console.log("Post:",post)
-    console.log("categoryInfo",postCategory())
+    // console.log("Post:",post)
+    // console.log("categoryInfo",postCategory())
   })
   return (
       <article className="item-list tie_lightbox">

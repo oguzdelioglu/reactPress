@@ -4,8 +4,8 @@ import store from '../stores'
 import { initializeApp } from "firebase/app";
 // eslint-disable-next-line
 // import * as firestore from 'firebase/firestore';
-import { getFirestore, collection, getDocs,query,orderBy,limit,startAt,where, startAfter } from 'firebase/firestore';
-import { updatePaginationPosts } from "../stores/posts";
+import { getFirestore, collection, getDocs,query,orderBy,limit, startAfter } from 'firebase/firestore';
+import { updateSnapshots } from "../stores/global";
 
 
 const firebaseConfig = {
@@ -45,20 +45,78 @@ export const fetchPost = async (post_url) => {
   return post;
 }
 
-export const fetchPosts = async (lastVisible) => {
+
+export const fetchPosts = async (isFirst=false) => {
+  const collectionName = "posts"
   const postPerPage = store.getState().global.postPerPage
-  console.log("lastVisible",lastVisible)
-  console.log("postPerPage",postPerPage)
+  const posts = store.getState().global.posts
+  const documentSnapshots = store.getState().global.documentSnapshots
+  // const lastVisible = posts && posts.length>0 ? posts[posts.length - 1]:{date:null};
+  const lastVisible = documentSnapshots && documentSnapshots.docs ? documentSnapshots.docs[documentSnapshots.docs.length-1] : {};
+  if(isFirst) {
+    console.log("First Loaded")
+    // Query the first page of docs
+    const first = query(collection(db, collectionName),orderBy("date"),limit(postPerPage));
+    const data = await getDocs(first)
+    store.dispatch(updateSnapshots(data))
+    // documentSnapshots = await getDocs(first);
+  } else {
+    console.log("Next Page Loaded")
+    // Construct a new query starting at this document,
+    // get the next 25 cities.
+    const next = query(collection(db,collectionName),orderBy("date"),startAfter(lastVisible),limit(postPerPage));
+    // documentSnapshots = await getDocs(next);
+    const data = await getDocs(next)
+    store.dispatch(updateSnapshots(data))
+  }
   
-  const ref = collection(db,'posts')
-  const q = query(ref,orderBy("date"),startAfter(lastVisible),limit(postPerPage));
-  const querySnapshot = await getDocs(q);
+  // Get the last visible document
+  // const lastVisible = documentSnapshots.docs[documentSnapshots.docs.length-1];
+  console.log("last", lastVisible);
+  console.log("postPerPage",postPerPage)
+
   const postList = []
-  querySnapshot.forEach((doc) => {
+  documentSnapshots.forEach((doc) => {
+    // postList.push(doc.data())
     const dataReplaced = doc.data()
-    postList.push(Object.assign(dataReplaced,
-    {"id":doc.id,//DATA DOCUMENT ID
+    postList.push(Object.assign(dataReplaced,{"id":doc.id,//DATA DOCUMENT ID
     "date": doc.data().date.toDate().toISOString().substring(0,10)})) //TIMESTAMP REPLACE
-    });
-  return postList
+  });
+
+
+
+  // const ref = collection(db,collectionName)
+  // const q = query(ref,orderBy("date"),startAfter(lastVisible.date),limit(postPerPage));
+  // const querySnapshot = await getDocs(q);
+  // const postList = []
+  // querySnapshot.forEach((doc) => {
+  //   const dataReplaced = doc.data()
+  //   postList.push(Object.assign(dataReplaced,
+  //   {"id":doc.id,//DATA DOCUMENT ID
+  //   "date": doc.data().date.toDate().toISOString().substring(0,10)})) //TIMESTAMP REPLACE
+  //   });
+  // return postList
+  return postList;
 }
+
+
+// export const fetchPosts = async () => {
+  
+//   const postPerPage = store.getState().global.postPerPage
+//   const posts = store.getState().global.posts
+//   const lastVisible = posts && posts.length>0 ? posts[posts.length - 1]:{date:null};
+//   console.log("lastVisible",lastVisible)
+//   console.log("postPerPage",postPerPage)
+  
+//   const ref = collection(db,'posts')
+//   const q = query(ref,orderBy("date"),startAfter(lastVisible.date),limit(postPerPage));
+//   const querySnapshot = await getDocs(q);
+//   const postList = []
+//   querySnapshot.forEach((doc) => {
+//     const dataReplaced = doc.data()
+//     postList.push(Object.assign(dataReplaced,
+//     {"id":doc.id,//DATA DOCUMENT ID
+//     "date": doc.data().date.toDate().toISOString().substring(0,10)})) //TIMESTAMP REPLACE
+//     });
+//   return postList
+// }

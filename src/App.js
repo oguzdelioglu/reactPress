@@ -24,8 +24,6 @@ import React, { useEffect } from 'react'
 
 export default function App() {
   const meta = useSelector((state) => state.global.meta)
-  const dispatch = useDispatch()
-
   useEffect(() => {
     //First load metadata settings
     
