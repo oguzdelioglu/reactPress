@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 export const globalSlice = createSlice({
   name: 'global',
   initialState: {
-    posts : [],
+    posts: [],
     documentSnapshots : [],
     postPerPage: 5,
     lastVisible: 0,
@@ -31,7 +31,16 @@ export const globalSlice = createSlice({
       state.lastVisible = action.payload
     },
     updatePosts: (state, action) => {
-      state.posts = action.payload
+      //Update Snapshot Data Object & Add Document ID to Object
+      const postList = []
+      action.payload.forEach((doc) => {
+        const dataReplaced = doc.data()
+        postList.push(Object.assign(dataReplaced,{"id":doc.id,//DATA DOCUMENT ID
+        "date": doc.data().date.toDate().toISOString().substring(0,10)})) //TIMESTAMP REPLACE
+      });
+      //Update Snapshot Data Object End
+      console.log("Gelen Veri",postList)
+      state.posts = [...state.posts,...postList];
     },
     updateSnapshots: (state, action) => {
       state.documentSnapshots = action.payload

@@ -27,10 +27,10 @@ export default function Header() {
               </form>
             </div>
             <div className="logo">
-              <h1> <Link rel="home" to="/">
+              <h1> <a rel="home" href="/">
                   {/* eslint-disable-next-line */}
                   <img src="/css/images/logo.png" width="175" height="44" /><strong />
-                </Link>
+                </a>
               </h1>
             </div>
             <div className="clear" />

@@ -22,7 +22,7 @@ export default function Post() {
   const nextPost = ""
 
   // const getCategory =(id)=>{
-  //   const category = categories.filter((category) => category.id === id).pop()
+  //   const category = categories.filter((category) => category.id === id).pop()
   //   return category
   // }
 

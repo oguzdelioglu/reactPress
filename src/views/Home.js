@@ -3,10 +3,12 @@ import React from 'react'
 import { useEffect,useState } from 'react'
 import { fetchPosts } from '../services/firebase'
 import Article from '../components/Article';
+import Pagination from '../components/Pagination';
 import { updatePosts } from '../stores/global';
 export default function Home() {
   // const postPerPage = useSelector((state) => state.global.postPerPage)
   const [firstLoad,setFirstLoad] = useState(true)
+  const [lastPage,setlastPage] = useState(false)
   const posts = useSelector((state) => state.global.posts)
   const lastVisible = useSelector((state) => state.global.lastVisible)
   const dispatch = useDispatch()
@@ -23,8 +25,12 @@ export default function Home() {
   },[lastVisible]);
  
   return (
-    <div className="post-listing archive-box">
-      { posts.map((post) => <Article key={post.id} post={post}></Article>) }
-    </div>
+    <>
+      <div className="post-listing archive-box">
+        { posts.map((post) => <Article key={post.id} post={post}></Article>) }
+      </div>
+      <Pagination lastPage></Pagination>
+    </>
+
   )
 }

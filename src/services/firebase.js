@@ -53,13 +53,17 @@ export const fetchPosts = async (isFirst=false) => {
   const documentSnapshots = store.getState().global.documentSnapshots
   // const lastVisible = posts && posts.length>0 ? posts[posts.length - 1]:{date:null};
   const lastVisible = documentSnapshots && documentSnapshots.docs ? documentSnapshots.docs[documentSnapshots.docs.length-1] : {};
+  console.log("last", lastVisible);
+  console.log("postPerPage",postPerPage)
   if(isFirst) {
     console.log("First Loaded")
     // Query the first page of docs
     const first = query(collection(db, collectionName),orderBy("date"),limit(postPerPage));
     const data = await getDocs(first)
+    console.log("Fetch Post Data:",data)
     store.dispatch(updateSnapshots(data))
     // documentSnapshots = await getDocs(first);
+    return data;
   } else {
     console.log("Next Page Loaded")
     // Construct a new query starting at this document,
@@ -68,21 +72,11 @@ export const fetchPosts = async (isFirst=false) => {
     // documentSnapshots = await getDocs(next);
     const data = await getDocs(next)
     store.dispatch(updateSnapshots(data))
+    return data;
   }
   
   // Get the last visible document
   // const lastVisible = documentSnapshots.docs[documentSnapshots.docs.length-1];
-  console.log("last", lastVisible);
-  console.log("postPerPage",postPerPage)
-
-  const postList = []
-  documentSnapshots.forEach((doc) => {
-    // postList.push(doc.data())
-    const dataReplaced = doc.data()
-    postList.push(Object.assign(dataReplaced,{"id":doc.id,//DATA DOCUMENT ID
-    "date": doc.data().date.toDate().toISOString().substring(0,10)})) //TIMESTAMP REPLACE
-  });
-
 
 
   // const ref = collection(db,collectionName)
@@ -96,7 +90,6 @@ export const fetchPosts = async (isFirst=false) => {
   //   "date": doc.data().date.toDate().toISOString().substring(0,10)})) //TIMESTAMP REPLACE
   //   });
   // return postList
-  return postList;
 }
 
 

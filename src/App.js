@@ -41,7 +41,6 @@ export default function App() {
       <DocumentMeta {...meta}></DocumentMeta>
       <Header></Header>
       <Container></Container>
-      <Pagination></Pagination>
       <Footer></Footer>
     </Router>
   </div>
