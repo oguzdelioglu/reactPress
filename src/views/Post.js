@@ -38,7 +38,7 @@ export default function Post() {
     } else {
       console.log("DB DEN Çektim")
       fetchPost(post_url).then(data => {
-        console.log(data)
+        console.log("Gelen Data",data)
         setPost(data)
         return data;
       })
@@ -97,6 +97,7 @@ export default function Post() {
         <div className="clear" />
         <div className="entry">
           <div style={{textAlign: 'center'}}> {PreviusNextPosts()}</div>
+          <img width={350} height={350} src={post.image} className="attachment-tie-medium size-tie-medium wp-post-image" alt={post.title} />
           <div dangerouslySetInnerHTML={{__html: post.content}} ></div>
         </div>
         {ShareSocialMedia()} 
@@ -117,7 +118,8 @@ export default function Post() {
   function PostTags() {
     return <p className="post-tag">Tags
       {post.tags.map((tag,index) => (
-        <Link key={index} rel="nofollow" to={process.env.REACT_APP_SEARCH_PREFIX + slugify(tag)}>{tag}</Link>
+        // <Link key={index} rel="nofollow" to={process.env.REACT_APP_SEARCH_PREFIX + slugify(tag)}>{tag}</Link>
+        <a key={index} rel="nofollow">{tag}</a>
       ))}
     </p>
   }
@@ -152,7 +154,7 @@ export default function Post() {
     return <nav id="crumbs"><Link rel="home" to="/">
         <span className="fa fa-home" aria-hidden="true" /> Home</Link>
         <span className="delimiter">/</span>
-        <Link rel="category" to={process.env.REACT_APP_CATEGORY_PREFIX + postCategory().slug}>{postCategory().name}</Link>
+        <a rel="category" href={process.env.REACT_APP_CATEGORY_PREFIX + postCategory().slug}>{postCategory().name}</a>
         <span className="delimiter">/<span className="current">{post.title}</span></span>
       </nav>
   }

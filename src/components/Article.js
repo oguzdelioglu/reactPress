@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom';
-import { getCategory } from '../util'
+import { getCategory, shortText } from '../util'
 export default function Article({post}) {
   const postCategory = () =>{
     return getCategory(post.category);
@@ -15,7 +15,7 @@ export default function Article({post}) {
             <Link to={process.env.REACT_APP_POST_PREFIX + post.link}>{post.title}</Link>
           </h2>
           <p className="post-meta">
-            <span className="post-cats"><i className="fa fa-folder" /><Link to={process.env.REACT_APP_CATEGORY_PREFIX  + postCategory().slug } rel="category">{ postCategory().name}</Link></span>
+            <span className="post-cats"><i className="fa fa-folder" /><a href={process.env.REACT_APP_CATEGORY_PREFIX  + postCategory().slug } rel="category">{ postCategory().name}</a></span>
           </p>
           <div className="post-thumbnail">
             <Link title={post.title} to={process.env.REACT_APP_POST_PREFIX + post.link}>
@@ -23,7 +23,7 @@ export default function Article({post}) {
             </Link>
           </div>
           <div className="entry">
-            <p>{post.title}</p>
+            <p>{shortText(post.title)}</p>
             <Link className="more-link" to={process.env.REACT_APP_POST_PREFIX + post.link}>Read More »</Link>
           </div>
           <div className="clear" />

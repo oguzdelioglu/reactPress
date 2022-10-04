@@ -1,5 +1,6 @@
 import Home from "./views/Home";
 import Post from "./views/Post";
+import Category from "./views/Category";
 import NotFound from "./views/NotFound";
 
 const router = [
@@ -12,6 +13,11 @@ const router = [
         path: '/post/:post_url',
         name: 'Post',
         element: <Post></Post>
+    },
+    {
+        path: '/category/:category_slug',
+        name: 'Category',
+        element: <Category></Category>
     },
     {
         path: '*',

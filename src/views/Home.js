@@ -9,6 +9,7 @@ export default function Home() {
   // const postPerPage = useSelector((state) => state.global.postPerPage)
   const [firstLoad,setFirstLoad] = useState(true)
   const [lastPage,setlastPage] = useState(false)
+  const [loading,setLoading] = useState(false)
   const posts = useSelector((state) => state.global.posts)
   const lastVisible = useSelector((state) => state.global.lastVisible)
   const dispatch = useDispatch()
@@ -16,10 +17,17 @@ export default function Home() {
   // const lastVisible = posts && posts.docs ? posts.docs[posts.docs.length - 1] : 0
 
   useEffect(()=> {
+    setLoading(true)
     fetchPosts(firstLoad).then((data)=> {
       console.log("All Posts Received:",data)
-      dispatch(updatePosts(data))
+      if(data.size === 0){
+        console.log("Son Sayfa")
+        setlastPage(true)
+      } else {
+        dispatch(updatePosts(data))
+      }
       setFirstLoad(false)
+      setLoading(false)
     })
     
   },[lastVisible]);
@@ -29,7 +37,7 @@ export default function Home() {
       <div className="post-listing archive-box">
         { posts.map((post) => <Article key={post.id} post={post}></Article>) }
       </div>
-      <Pagination lastPage></Pagination>
+      <Pagination lastPage={lastPage} loading={loading}></Pagination>
     </>
 
   )

@@ -41,8 +41,8 @@ export default function Header() {
                 <ul id="menu-ana-menu" className="menu">
                   <li id="menu-item-1" className="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-home"><Link rel="home" to="/">Home</Link></li>
                   {
-                    categories.map((category,index) => 
-                      <li key={index + 2} id={'menu-item-' + (index + 2)} className={'menu-item menu-item-type-post_type menu-item-object-page menu-item-' + index}><Link style={{textTransform: 'capitalize'}} rel="category" to={'/category/' + category.slug}><i className="fa fa-folder" />{category.name}</Link></li>
+                    [...categories].slice(0, 5).map((category,index) => 
+                      <li key={index + 2} id={'menu-item-' + (index + 2)} className={'menu-item menu-item-type-post_type menu-item-object-page menu-item-' + index}><a style={{textTransform: 'capitalize'}} rel="category" href={'/category/' + category.slug}><i className="fa fa-folder" />{category.name}</a></li>
                     )
                   }
                 </ul>

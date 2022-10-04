@@ -1,4 +1,7 @@
 import React, { Component } from 'react'
+import LatestPosts from './FooterElements/LatestPosts'
+import PopularPosts from './FooterElements/PopularPosts'
+import RandomPosts from './FooterElements/RandomPosts'
 
 export default class Footer extends Component {
   render() {
@@ -11,43 +14,13 @@ export default class Footer extends Component {
   <footer id="theme-footer">
     <div id="footer-widget-area" className="footer-3c">
       <div id="footer-first" className="footer-widgets-box">
-        <div id="posts-list-widget-2" className="footer-widget posts-list">
-          <div className="footer-widget-top">
-            <h3>Popular Posts </h3>
-          </div>
-          <div className="footer-widget-container">
-            <ul>
-                Popular Pin List
-            </ul>
-            <div className="clear" />
-          </div>
-        </div>{/* .widget /*/}
+       <PopularPosts maxPost={5}></PopularPosts>
       </div>
       <div id="footer-second" className="footer-widgets-box">
-        <div id="posts-list-widget-3" className="footer-widget posts-list">
-          <div className="footer-widget-top">
-            <h3>Random Posts </h3>
-          </div>
-          <div className="footer-widget-container">
-            <ul>
-              Random Post
-            </ul>
-            <div className="clear" />
-          </div>
-        </div>{/* .widget /*/}
-      </div>{/* #second .widget-area */}
+      <RandomPosts maxPost={5}></RandomPosts>
+      </div>
       <div id="footer-third" className="footer-widgets-box">
-        <div id="posts-list-widget-4" className="footer-widget posts-list">
-          <div className="footer-widget-top">
-            <h3>Latest Posts </h3>
-          </div>
-          <div className="footer-widget-container">
-            <ul>
-             Son Postlar
-            </ul>
-            <div className="clear" />
-          </div>
-        </div>{/* .widget /*/}
+      <LatestPosts maxPost={5}></LatestPosts>
       </div>{/* #third .widget-area */}
     </div>{/* #footer-widget-area */}
     <div className="clear" />

@@ -17,11 +17,21 @@ export function slugify(string) {
       .replace(/-+$/, '') // Trim - from end of text
   }
 
+  export function shortText(text,maxLength=100) {
+    if(text.length > maxLength){
+      text = text.substr(0,maxLength)+'...';
+    }
+    return text
+  }
+
   export function getCategory(id) {
-    // console.log("Aranan Kategori ID:",id)
-    const categories = store.getState().global.categories;//useSelector((state) => state.global.categories)
-    // console.log("Kategoriler",categories)
+    const categories = store.getState().global.categories;
     const category = categories.filter((category) => category.id === id).pop()
-    // console.log("Bulunan Kategori:",category)
+    return category
+  }
+
+  export function getCategoryBySlug(slug) {
+    const categories = store.getState().global.categories;
+    const category = categories.filter((category) => category.slug === slug).pop()
     return category
   }

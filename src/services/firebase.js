@@ -4,7 +4,7 @@ import store from '../stores'
 import { initializeApp } from "firebase/app";
 // eslint-disable-next-line
 // import * as firestore from 'firebase/firestore';
-import { getFirestore, collection, getDocs,query,orderBy,limit, startAfter } from 'firebase/firestore';
+import { getFirestore, collection, getDocs,query,orderBy,limit, startAfter, where } from 'firebase/firestore';
 import { updateSnapshots } from "../stores/global";
 
 
@@ -21,44 +21,47 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const postCollection = collection(db,"posts");
+const settingCollection = collection(db,"settings");
+const categoryCollection = collection(db, 'categories');
 
 export const getSettings = async () => {
-  const Col = collection(db, 'settings');
-  const Snapshot = await getDocs(Col);
+  const Snapshot = await getDocs(settingCollection);
   const List = Snapshot.docs.map(doc => doc.data());
   return List[0];
 }
 
 export const fetchCategories = async () => {
-  const Col = collection(db, 'categories');
-  const Snapshot = await getDocs(Col);
+  const Snapshot = await getDocs(categoryCollection);
   const List = Snapshot.docs.map(doc => Object.assign(doc.data(),{"id":doc.id}));
   console.log("Kategoriler:",List)
   return List;
 }
 
 export const fetchPost = async (post_url) => {
-  const Col = collection(db, 'posts');
-  const Snapshot = await getDocs(Col);
+  const Snapshot = await getDocs(postCollection);
   const List = Snapshot.docs.map(doc => doc.data());
-  const post = List.filter(p=> p.post_link === post_url).shift()
+  const post = List.filter(p=> p.link === post_url).shift()
   return post;
 }
 
 
-export const fetchPosts = async (isFirst=false) => {
-  const collectionName = "posts"
+export const fetchPosts = async (isFirst=false,category_slug=null) => {
   const postPerPage = store.getState().global.postPerPage
-  const posts = store.getState().global.posts
   const documentSnapshots = store.getState().global.documentSnapshots
+  const queryConstraints = []
   // const lastVisible = posts && posts.length>0 ? posts[posts.length - 1]:{date:null};
   const lastVisible = documentSnapshots && documentSnapshots.docs ? documentSnapshots.docs[documentSnapshots.docs.length-1] : {};
-  console.log("last", lastVisible);
+  console.log("last", lastVisible)
   console.log("postPerPage",postPerPage)
+  
+  if (category_slug != null) queryConstraints.push(where('category', '==', category_slug))
+
   if(isFirst) {
     console.log("First Loaded")
     // Query the first page of docs
-    const first = query(collection(db, collectionName),orderBy("date"),limit(postPerPage));
+    let first = query(postCollection,orderBy("date"),limit(postPerPage), ...queryConstraints)
+    // if(category_slug) first = first.where('category','==',category_slug)
     const data = await getDocs(first)
     console.log("Fetch Post Data:",data)
     store.dispatch(updateSnapshots(data))
@@ -68,7 +71,7 @@ export const fetchPosts = async (isFirst=false) => {
     console.log("Next Page Loaded")
     // Construct a new query starting at this document,
     // get the next 25 cities.
-    const next = query(collection(db,collectionName),orderBy("date"),startAfter(lastVisible),limit(postPerPage));
+    const next = query(postCollection,orderBy("date"),startAfter(lastVisible),limit(postPerPage), ...queryConstraints);
     // documentSnapshots = await getDocs(next);
     const data = await getDocs(next)
     store.dispatch(updateSnapshots(data))

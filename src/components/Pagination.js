@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { updatelastVisible } from '../stores/global';
 
-export default function Pagination() {
+export default function Pagination({lastPage,loading}) {
   const dispatch = useDispatch()
   const [pageNumber,setPageNumber] = useState(1)
   const postPerPage = useSelector((state) => state.global.postPerPage)
@@ -18,7 +18,9 @@ export default function Pagination() {
 
   return (
     <>
-           <button onClick={() => getPostTrigger(pageNumber*postPerPage)} to="#"  className="button">Load More</button>
+          {loading && <h1>Loading...</h1>}
+          {!loading && !lastPage && <button onClick={() => getPostTrigger(pageNumber*postPerPage)} to="#"  className="button">Load More</button>}
+          {lastPage && <h1>There are no more data</h1>}
             {/* <a href="currenturl?page=1" className="page">First</a>
             <span rel="prev" id="tie-prev-page"><a href="current?page=$prevpage">«</a></span>
             <span className="current">Current</span>

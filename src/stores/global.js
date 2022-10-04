@@ -25,7 +25,7 @@ export const globalSlice = createSlice({
       state.meta = action.payload
     },
     updateCategories: (state, action) => {
-        state.categories = action.payload
+      state.categories = action.payload
     },
     updatelastVisible: (state, action) => {
       state.lastVisible = action.payload
@@ -42,6 +42,10 @@ export const globalSlice = createSlice({
       console.log("Gelen Veri",postList)
       state.posts = [...state.posts,...postList];
     },
+    clearPosts: (state,action) => {
+      state.posts = [];
+      state.documentSnapshots = [];
+    },
     updateSnapshots: (state, action) => {
       state.documentSnapshots = action.payload
     },
@@ -49,6 +53,6 @@ export const globalSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { updateCategories , updateMetadata, updatePosts , updatelastVisible, updateSnapshots } = globalSlice.actions
+export const { updateCategories , updateMetadata, updatePosts , updatelastVisible, updateSnapshots, clearPosts } = globalSlice.actions
 
 export default globalSlice.reducer
