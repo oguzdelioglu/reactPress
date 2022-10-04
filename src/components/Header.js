@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { fetchCategories } from '../services/firebase'
 import { updateCategories } from '../stores/global'
 
 export default function Header() {
   const categories = useSelector((state) => state.global.categories)
   const dispatch = useDispatch()
-
+  const navigate = useNavigate()
+  const handleSubmit = (event) => {
+      console.log(event.target.q.value)
+      navigate(process.env.REACT_APP_SEARCH_PREFIX + event.target.q.value)
+      event.preventDefault()
+  };
   useEffect(() => {
     fetchCategories().then(data=> {
       console.log("Categories Loaded.")
@@ -21,7 +26,7 @@ export default function Header() {
             {/* eslint-disable-next-line */}
             <a title="Menu" id="slide-out-open" className="slide-out-open" href="#"><span /></a>
             <div className="search-block">
-              <form method="get" id="searchform-header" action="search">
+              <form onSubmit={handleSubmit} id="searchform-header">
                 <button aria-label="search-button" className="search-button" type="submit" placeholder="Search"><i className="fa fa-search" /></button>
                 <input className="search-live" type="text" id="s-header" name="q" title="Search" placeholder="Search" minLength={3} maxLength={20} required onFocus={onFocusEvent.bind(this)} onBlur={onBlurEvent.bind(this)} />
               </form>

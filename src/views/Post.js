@@ -96,7 +96,7 @@ export default function Post() {
         {PostMeta()}
         <div className="clear" />
         <div className="entry">
-          <div style={{textAlign: 'center'}}> {PreviusNextPosts()}</div>
+          {/* <div style={{textAlign: 'center'}}> {PreviusNextPosts()}</div> */}
           <img width={350} height={350} src={post.image} className="attachment-tie-medium size-tie-medium wp-post-image" alt={post.title} />
           <div dangerouslySetInnerHTML={{__html: post.content}} ></div>
         </div>
@@ -118,8 +118,7 @@ export default function Post() {
   function PostTags() {
     return <p className="post-tag">Tags
       {post.tags.map((tag,index) => (
-        // <Link key={index} rel="nofollow" to={process.env.REACT_APP_SEARCH_PREFIX + slugify(tag)}>{tag}</Link>
-        <a key={index} rel="nofollow">{tag}</a>
+        <Link key={index} to={process.env.REACT_APP_SEARCH_PREFIX + tag} rel="nofollow">{tag}</Link>
       ))}
     </p>
   }

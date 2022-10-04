@@ -13,7 +13,7 @@ export default function RandomPosts({maxPost}) {
     <ul>
         { [...posts].sort(() => Math.random() - 0.5).slice(0, maxPost).map((post) => <FooterArticle key={post.id} post={post}></FooterArticle>) }
     </ul>
-    <div class="clear"></div>
+    <div className="clear"></div>
     </div>
   </div>
   )

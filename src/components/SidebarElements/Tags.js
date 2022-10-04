@@ -4,6 +4,8 @@ import Tag from './Tag'
 
 export default function Tags() {
     const posts = useSelector((state) => state.global.posts)
+    const tags = [...posts].map((post) => {return post.tags}).toString().split(',')
+    const tagsRemovedDuplicate = tags.filter((element, index) => {return tags.indexOf(element) === index;})
   return (
     <div className="widget" id="tabbed-widget">
     <div className="widget-container">
@@ -16,10 +18,7 @@ export default function Tags() {
         <div className="widget">
           <h2 className="widget-title">Tags</h2>
           <div className="widget-tags">
-          { [...posts].map((post) => 
-            {
-                return post.tags
-            }).toString().split(',').map((tag,index)=> <Tag key={index} tag={tag}></Tag>) }
+            {tagsRemovedDuplicate.map((tag,index)=> <Tag key={index} tag={tag}></Tag>)}
           </div>
         </div>
       </div>

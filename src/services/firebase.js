@@ -7,7 +7,6 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs,query,orderBy,limit, startAfter, where } from 'firebase/firestore';
 import { updateSnapshots } from "../stores/global";
 
-
 const firebaseConfig = {
   apiKey: "AIzaSyCJ7DLBntXHYdsX2EkLFX19ogvwe7lcq9g",
   authDomain: "edelsteineinformationen.firebaseapp.com",
@@ -45,7 +44,6 @@ export const fetchPost = async (post_url) => {
   return post;
 }
 
-
 export const fetchPosts = async (isFirst=false,category_slug=null) => {
   const postPerPage = store.getState().global.postPerPage
   const documentSnapshots = store.getState().global.documentSnapshots
@@ -54,65 +52,30 @@ export const fetchPosts = async (isFirst=false,category_slug=null) => {
   const lastVisible = documentSnapshots && documentSnapshots.docs ? documentSnapshots.docs[documentSnapshots.docs.length-1] : {};
   console.log("last", lastVisible)
   console.log("postPerPage",postPerPage)
-  
+
   if (category_slug != null) queryConstraints.push(where('category', '==', category_slug))
 
   if(isFirst) {
     console.log("First Loaded")
     // Query the first page of docs
     let first = query(postCollection,orderBy("date"),limit(postPerPage), ...queryConstraints)
-    // if(category_slug) first = first.where('category','==',category_slug)
     const data = await getDocs(first)
     console.log("Fetch Post Data:",data)
     store.dispatch(updateSnapshots(data))
-    // documentSnapshots = await getDocs(first);
     return data;
   } else {
     console.log("Next Page Loaded")
-    // Construct a new query starting at this document,
-    // get the next 25 cities.
     const next = query(postCollection,orderBy("date"),startAfter(lastVisible),limit(postPerPage), ...queryConstraints);
-    // documentSnapshots = await getDocs(next);
     const data = await getDocs(next)
     store.dispatch(updateSnapshots(data))
     return data;
   }
-  
-  // Get the last visible document
-  // const lastVisible = documentSnapshots.docs[documentSnapshots.docs.length-1];
-
-
-  // const ref = collection(db,collectionName)
-  // const q = query(ref,orderBy("date"),startAfter(lastVisible.date),limit(postPerPage));
-  // const querySnapshot = await getDocs(q);
-  // const postList = []
-  // querySnapshot.forEach((doc) => {
-  //   const dataReplaced = doc.data()
-  //   postList.push(Object.assign(dataReplaced,
-  //   {"id":doc.id,//DATA DOCUMENT ID
-  //   "date": doc.data().date.toDate().toISOString().substring(0,10)})) //TIMESTAMP REPLACE
-  //   });
-  // return postList
 }
 
-
-// export const fetchPosts = async () => {
-  
-//   const postPerPage = store.getState().global.postPerPage
-//   const posts = store.getState().global.posts
-//   const lastVisible = posts && posts.length>0 ? posts[posts.length - 1]:{date:null};
-//   console.log("lastVisible",lastVisible)
-//   console.log("postPerPage",postPerPage)
-  
-//   const ref = collection(db,'posts')
-//   const q = query(ref,orderBy("date"),startAfter(lastVisible.date),limit(postPerPage));
-//   const querySnapshot = await getDocs(q);
-//   const postList = []
-//   querySnapshot.forEach((doc) => {
-//     const dataReplaced = doc.data()
-//     postList.push(Object.assign(dataReplaced,
-//     {"id":doc.id,//DATA DOCUMENT ID
-//     "date": doc.data().date.toDate().toISOString().substring(0,10)})) //TIMESTAMP REPLACE
-//     });
-//   return postList
-// }
+export const searchKeyword = async (keyword) => {
+    let first = query(postCollection,limit(10), where('tags', "array-contains", keyword))
+    const data = await getDocs(first)
+    console.log("Search Result:",data)
+    store.dispatch(updateSnapshots(data))
+    return data;
+}

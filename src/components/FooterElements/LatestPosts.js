@@ -13,7 +13,7 @@ export default function LatestPosts({maxPost}) {
     <ul>
         { [...posts].sort(function (a, b) {  return b.date - a.date;  }).slice(0, maxPost).map((post) => <FooterArticle key={post.id} post={post}></FooterArticle>) }
     </ul>
-    <div class="clear"></div>
+    <div className="clear"></div>
     </div>
   </div>
   )
