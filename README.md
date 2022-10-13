@@ -1,6 +1,6 @@
 # Script Information
 
-This Script Cloned Wordpress to ReactJS (Template and Backend)
+This Template Cloned Wordpress to ReactJS
 
 # Getting Started with Create React App
 
