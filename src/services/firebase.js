@@ -1,11 +1,12 @@
 import store from '../stores/index.js';
-
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-// eslint-disable-next-line
-// import * as firestore from 'firebase/firestore';
 import { getFirestore, collection, getDocs,query,orderBy,limit, startAfter, where } from 'firebase/firestore';
 import { updateSnapshots } from "../stores/global.js";
+
+// const store = require('../stores/index.js');
+// const { getFirestore, collection, getDocs,query,orderBy,limit, startAfter, where } = require('firebase/firestore');
+// const { updateSnapshots } = require("../stores/global.js");
+// const { initializeApp } = require('firebase/app');
 
 const firebaseConfig = {
   apiKey: "AIzaSyCJ7DLBntXHYdsX2EkLFX19ogvwe7lcq9g",
@@ -23,6 +24,7 @@ const db = getFirestore(app);
 const postCollection = collection(db,"posts");
 const settingCollection = collection(db,"settings");
 const categoryCollection = collection(db, 'categories');
+
 
 //Backend
 export const addPost = async (data) => {

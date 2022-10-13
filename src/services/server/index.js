@@ -1,8 +1,7 @@
-// const { addPost } = require('../firebase.js');
-import { addPost } from '../firebase.js'
+const { addPost } = require('../firebase.js');
+// import { addPost } from '../firebase.js'
 // module.exports = require("../firebase.js");
 // const parse = require('./firebase');
-
 // const {addPost} = require('./firebase');
 
 const express = require('express');
