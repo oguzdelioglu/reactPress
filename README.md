@@ -7,7 +7,7 @@ This Template Cloned Wordpress to ReactJS
 ReactJS \
 React Redux \
 NodeJS \
-Firebase (Firestore) \
+Firebase (Firestore)
 
 # Getting Started with Create React App
 
