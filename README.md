@@ -4,9 +4,10 @@ This Template Cloned Wordpress to ReactJS
 
 # Used Techs
 
-ReactJS
-NodeJS
-Firebase (Firestore)
+ReactJS \
+React Redux \
+NodeJS \
+Firebase (Firestore) \
 
 # Getting Started with Create React App
 
