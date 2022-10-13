@@ -19,7 +19,6 @@ import { updateMetadata } from './stores/global';
 
 //Firebase Database
 import { getSettings } from './services/firebase';
-
 import React, { useEffect } from 'react'
 
 export default function App() {
