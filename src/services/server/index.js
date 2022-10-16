@@ -42,7 +42,7 @@ app.post('/api', async (req, res) => {
             res.status(402).send({status:"The data is not enough.",result: fixObj})
           } else {
             const result = await addPost(fixObj)
-            if(result && result.id) { //result && result.id
+            if(result && result.id) {
               res.status(200).send({status:"Post Added",result: result.id})
             } else {
               res.status(402).send({status:"Post Not Added",result: result})
@@ -68,10 +68,9 @@ const addPost = async (data) => {
   const List = Snapshot.docs.map(doc => doc.data());
   const post = List.filter(p=> p.link === data.link).shift()
   if(!post) {
-    const result = await addDoc(postCollection, data);
-    return result
+    return await addDoc(postCollection, data)
   } else {
-    return false
+    return "This Post Already Exist"
   }
 }
 
