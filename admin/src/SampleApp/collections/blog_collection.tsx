@@ -35,13 +35,19 @@ export const blogCollection = buildCollection<BlogEntry>({
     permissions: ({
         authController
     }) => {
+        console.log("isAdmin:",authController.extra?.roles)
         const isAdmin = authController.extra?.roles.includes("admin");
         return ({
         edit: isAdmin,
         create: isAdmin,
         delete: isAdmin
         });
-    },
+    }, 
+    // permissions: ({ authController }) => ({
+    //     edit: true,
+    //     create: true,
+    //     delete: authController.extra?.roles.admin,
+    // }),
     singularName: "Blog entry",
     group: "Content",
     icon: "Article",
