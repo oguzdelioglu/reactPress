@@ -58,33 +58,33 @@ function SampleApp() {
         user,
         authController
     }) => {
-        const userIsAdmin = user?.email?.includes("oguzdelioglu@gmail.com");
-            authController.setExtra({
-            roles: {
-                admin: userIsAdmin
-            }
-        });
+       if(user?.email?.includes("oguzdelioglu@gmail.com"))
+       {
+        authController.setExtra({roles: ["admin"]})
         console.log("Allowing access to", user?.email);
         return true;
+       } else {
+        return false;
+       }
     }, []);
 
     const collections = [
-        productsCollection,
-        usersCollection,
+        // productsCollection,
+        // usersCollection,
         blogCollection,
-        showcaseCollection
+        // showcaseCollection
     ];
 
-    if (process.env.NODE_ENV !== "production") {
-        collections.push(testCollection);
-    }
+    // if (process.env.NODE_ENV !== "production") {
+    //     collections.push(testCollection);
+    // }
 
     return <FirebaseCMSApp
         name={"ReactPress CMS Panel"}
         authentication={myAuthenticator}
         signInOptions={[
-            // "password",
-            "google.com"
+            "password",
+            // "google.com"
             // 'anonymous',
             // 'phone',
             // 'facebook.com',
@@ -97,7 +97,7 @@ function SampleApp() {
         allowSkipLogin={false}
         logo={logo}
         collections={(params) => collections}
-        views={customViews}
+        // views={customViews}
         collectionOverrideHandler={customCollectionOverrideHandler}
         firebaseConfig={firebaseConfig}
         onFirebaseInit={onFirebaseInit}

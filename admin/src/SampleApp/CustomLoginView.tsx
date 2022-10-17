@@ -27,7 +27,7 @@ export function CustomLoginView(props: FirebaseLoginViewProps) {
             disabled={!termsAccepted}
             AdditionalComponent={
                 <FormGroup>
-                    <FormControlLabel
+                    {/* <FormControlLabel
                         control={
                             <Switch size="small"
                                     value={newsletterSubscribed}
@@ -40,7 +40,7 @@ export function CustomLoginView(props: FirebaseLoginViewProps) {
                             <Typography variant={"caption"}>
                                 Join our newsletter. No spam, only important
                                 updates!
-                            </Typography>}/>
+                            </Typography>}/> */}
                     <FormControlLabel
                         control={
                             <Switch size="small"

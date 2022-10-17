@@ -1,4 +1,3 @@
-import CustomColorTextField from "../custom_field/CustomColorTextField";
 import {
     buildCollection,
     buildProperty,
@@ -7,15 +6,15 @@ import {
 import { BlogEntryPreview } from "../custom_entity_view/BlogEntryPreview";
 
 export type BlogEntry = {
-    name: string,
+    title: string,
     header_image: string,
     content: any[],
-    gold_text: string,
     created_on: Date,
     publish_date: Date,
     reviewed: boolean,
     status: string,
-    tags: string[]
+    tags: string[],
+    hit: number,
 }
 
 /**
@@ -54,17 +53,17 @@ export const blogCollection = buildCollection<BlogEntry>({
     exportable: {
         additionalFields: [sampleAdditionalExportColumn]
     },
-    description: "Collection of blog entries included in our [awesome blog](https://www.google.com)",
+    description: "Blog Posts",
     textSearchEnabled: true,
-    defaultSize: "l",
+    defaultSize: "s",
     views: [{
         path: "preview",
         name: "Preview",
         builder: (props) => <BlogEntryPreview {...props}/>
     }],
     properties: {
-        name: buildProperty({
-            name: "Name",
+        title: buildProperty({
+            name: "Title",
             validation: { required: true },
             dataType: "string"
         }),
@@ -141,15 +140,6 @@ export const blogCollection = buildCollection<BlogEntry>({
                 }
             }
         }),
-        gold_text: buildProperty({
-            name: "Gold text",
-            description: "This field is a sample that uses a custom component defined by the developer",
-            dataType: "string",
-            Field: CustomColorTextField,
-            customProps: {
-                color: "gold"
-            }
-        }),
         publish_date: buildProperty({
             name: "Publish date",
             dataType: "date",
@@ -168,7 +158,17 @@ export const blogCollection = buildCollection<BlogEntry>({
                 previewAsTag: true
             },
             defaultValue: ["default tag"]
-        }
+        },
+        hit: buildProperty({
+            name: "Hit",
+            dataType: "number",
+            disabled: {
+                hidden: true,
+            },
+            defaultValue: 0,
+            // readOnly: true,
+            // disabled: true
+        }),
     },
     initialFilter: {
         status: ["==", "published"]
