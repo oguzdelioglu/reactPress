@@ -3,10 +3,14 @@ import {
     buildProperty,
     ExportMappingFunction
 } from "@camberi/firecms";
+import { useEffect } from "react";
 import { BlogEntryPreview } from "../custom_entity_view/BlogEntryPreview";
+import { FieldDescription, FieldProps } from "@camberi/firecms";
+import { TextField } from "@mui/material";
 
 export type BlogEntry = {
     title: string,
+    link: string,
     header_image: string,
     content: any[],
     created_on: Date,
@@ -16,6 +20,37 @@ export type BlogEntry = {
     tags: string[],
     hit: number,
 }
+
+// export default function CustomTitleField({
+//     property,
+//     value,
+//     setValue,
+//     customProps,
+//     touched,
+//     error,
+//     isSubmitting,
+//     context, // the rest of the entity values here
+//     ...props
+//     }: FieldProps<string>) {
+//     return (
+//     <>
+//     <TextField required={property.validation?.required}
+//     error={!!error}
+//     disabled={isSubmitting}
+//     datatype={property.dataType}
+//     label={property.name}
+//     value={value ?? ""}
+//     onChange={(evt: any) => {
+//     setValue(
+//     evt.target.value
+//     );
+//     }}
+//     helperText={error}
+//     fullWidth
+//     variant={"filled"}/>
+//     </>
+//     );
+// }
 
 /**
  * Sample field that will be added to the export
@@ -64,6 +99,13 @@ export const blogCollection = buildCollection<BlogEntry>({
     properties: {
         title: buildProperty({
             name: "Title",
+            validation: { required: true },
+            dataType: "string",
+
+            // Field: CustomTitleField
+        }),
+        link: buildProperty({
+            name: "Link",
             validation: { required: true },
             dataType: "string"
         }),
