@@ -6,12 +6,15 @@ import { Link, useParams } from 'react-router-dom'
 import { slugify, getCategory } from '../util'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateMetadata } from '../stores/global';
+import { getImage } from '../services/firebase'
 
 
 export default function Post() {
+  const [contentIndex, setContentIndex ] = useState(0);
+  const [imgUrls, setImgUrl] = useState([]);
+  const [contents, setContent] = useState([]);
   const [post, setPost] = useState()
   const dispatch = useDispatch()
-
   const categories = useSelector((state) => state.global.categories)
   const posts = useSelector((state) => state.global.posts)
   const { post_url } = useParams()
@@ -26,6 +29,11 @@ export default function Post() {
   //   return category
   // }
 
+  const getImageUrl = (imgUrl) => {
+    const result = imgUrls.filter(img => img.id === imgUrl).shift()
+    // console.log("Resim Arama SOnucu",result,imgUrl)
+    return result;
+  }
   //Get Post Data
   useEffect(() => {
     console.log("Post Link ->",post_url)
@@ -43,12 +51,22 @@ export default function Post() {
         return data;
       })
     }
+
   },[post_url, posts]);
+    //Get Post Data
+  useEffect(() => {
+    console.log("IMG LER ",imgUrls)
+  },[imgUrls]);
+
+
+  useEffect(() => {
+    console.log("Content Güncellendi",contents)
+  },[contents]);
 
 
   //Metadata Update After Post data received
   useEffect(()=> {
-    if(post && post.title) {
+    if(post && post.title && post.header_image) {
       const meta =  {
         title: post.title,
         description: post.title,
@@ -62,6 +80,18 @@ export default function Post() {
       }
       console.log("New Metadata:",meta)
       dispatch(updateMetadata(meta))
+      getImage(post.header_image).then(result =>{ setImgUrl(images => [...images, {id: post.header_image ,image:result}])})
+      post.content.map(async function(data) {
+        if(data.type === 'text') {
+          return setContent(contents => [...contents, { type: data.type, value: data.value }])
+        } else if(data.type === 'images') {
+          data.value.map(async function(image) {
+          return await getImage(image).then(function (result) {
+              setContent(contents => [...contents, {type: data.type,value: result}])
+            })
+          })
+        }
+      })
     }
   },[dispatch, post])
 
@@ -75,7 +105,7 @@ export default function Post() {
   //   dispatch(updatePost(data))
   // }, []);
   
-  if (post && post.title && post.category && categories) {
+  if (post && post.title && post.header_image && categories) { //&& post.category
     return (
       <>
         <Content></Content>
@@ -97,8 +127,21 @@ export default function Post() {
         <div className="clear" />
         <div className="entry">
           {/* <div style={{textAlign: 'center'}}> {PreviusNextPosts()}</div> */}
-          <img width={350} height={350} src={post.image} className="attachment-tie-medium size-tie-medium wp-post-image" alt={post.title} />
-          <div dangerouslySetInnerHTML={{__html: post.content}} ></div>
+          { getImageUrl(post.header_image) !== undefined ? <img width={350} height={350} src={getImageUrl(post.header_image).image} className="attachment-tie-medium size-tie-medium wp-post-image" alt={post.title}/>: ""}
+          <div className="clear" />
+          {
+            contents.map((content,index) => { 
+              switch(content.type) {
+                case 'text':
+                  return <div key={index} dangerouslySetInnerHTML={{ __html: content.value }}></div>
+                case 'images':
+                  return <img key={index} alt={post.title} src={ content.value }></img>
+                default:
+                  return null
+              }
+            })
+          }
+          {/* { PostContent(post.content) } */}
         </div>
         {ShareSocialMedia()} 
         <div className="clear" />
@@ -106,8 +149,22 @@ export default function Post() {
     </article>
       {PostTags()}
     </>
+
+
   }
 
+
+  function PostContent(content) {
+    console.log("Gelen Content",content)
+    content.map(function(data,index) {
+      console.log("Valuesi",data.type)
+      if(data.type === 'text') {
+        console.log("Textteyim",data.value)
+        return <div key={index} dangerouslySetInnerHTML={{ __html: data.value }}></div>
+      }
+      //if(data.type === 'images') data.value.map((image,imgIndex) => (<img key={imgIndex} alt={post.title} src={ image }></img>))
+    })
+  }
 
   function Title() {
     return <h1 className="name post-title entry-title">
@@ -146,15 +203,18 @@ export default function Post() {
   function PostMeta() {
     return <p className="post-meta">
       <span className="post-cats"><i className="fa fa-folder" />
-      <Link to={process.env.REACT_APP_CATEGORY_PREFIX + postCategory().slug} rel="category">{postCategory().name}</Link></span>
+      {/* <Link to={process.env.REACT_APP_CATEGORY_PREFIX + postCategory().slug} rel="category">{postCategory().name}</Link> */}
+      </span>
     </p>
   }
   function NavBar() {
     return <nav id="crumbs"><Link rel="home" to="/">
         <span className="fa fa-home" aria-hidden="true" /> Home</Link>
         <span className="delimiter">/</span>
-        <a rel="category" href={process.env.REACT_APP_CATEGORY_PREFIX + postCategory().slug}>{postCategory().name}</a>
+        {/* <a rel="category" href={process.env.REACT_APP_CATEGORY_PREFIX + postCategory().slug}>{postCategory().name}</a> */}
         <span className="delimiter">/<span className="current">{post.title}</span></span>
       </nav>
   }
 }
+
+
