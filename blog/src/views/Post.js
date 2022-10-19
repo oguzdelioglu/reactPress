@@ -7,7 +7,7 @@ import { slugify, getCategory } from '../util'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateMetadata } from '../stores/global';
 import { getImage } from '../services/firebase'
-
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export default function Post() {
   const [contentIndex, setContentIndex ] = useState(0);
@@ -127,7 +127,7 @@ export default function Post() {
         <div className="clear" />
         <div className="entry">
           {/* <div style={{textAlign: 'center'}}> {PreviusNextPosts()}</div> */}
-          { getImageUrl(post.header_image) !== undefined ? <img width={350} height={350} src={getImageUrl(post.header_image).image} className="attachment-tie-medium size-tie-medium wp-post-image" alt={post.title}/>: ""}
+          { getImageUrl(post.header_image) !== undefined ? <LazyLoadImage width={350} height={350} src={getImageUrl(post.header_image).image} className="attachment-tie-medium size-tie-medium wp-post-image" alt={post.title}/>: ""}
           <div className="clear" />
           {
             contents.map((content,index) => { 
@@ -135,7 +135,7 @@ export default function Post() {
                 case 'text':
                   return <div key={index} dangerouslySetInnerHTML={{ __html: content.value }}></div>
                 case 'images':
-                  return <img key={index} alt={post.title} src={ content.value }></img>
+                  return <LazyLoadImage key={index} alt={post.title} src={ content.value }></LazyLoadImage>
                 default:
                   return null
               }
@@ -195,8 +195,8 @@ export default function Post() {
 
   function PreviusNextPosts() {
     return <div>
-      <Link to={process.env.REACT_APP_POST_PREFIX + previusPost} title="previus post"><img className="alignnone size-medium tie-appear" src="/css/images/previous.gif" alt="previus" width={150} height={55} /></Link>
-      <Link to={process.env.REACT_APP_POST_PREFIX + nextPost} title="next post"><img className="alignnone size-full tie-appear" src="/css/images/next.gif" alt="next" width={150} height={55} /></Link>
+      <Link to={process.env.REACT_APP_POST_PREFIX + previusPost} title="previus post"><LazyLoadImage className="alignnone size-medium tie-appear" src="/css/images/previous.gif" alt="previus" width={150} height={55} /></Link>
+      <Link to={process.env.REACT_APP_POST_PREFIX + nextPost} title="next post"><LazyLoadImage className="alignnone size-full tie-appear" src="/css/images/next.gif" alt="next" width={150} height={55} /></Link>
     </div>
   }
 
