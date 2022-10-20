@@ -19,7 +19,7 @@ export default function Post() {
   const posts = useSelector((state) => state.global.posts)
   const { post_url } = useParams()
   const postCategory = () =>{
-    return getCategory(post.category);
+    return getCategory(post.categories);
   }
   const previusPost = ""
   const nextPost = ""
@@ -105,7 +105,7 @@ export default function Post() {
   //   dispatch(updatePost(data))
   // }, []);
   
-  if (post && post.title && post.header_image && categories) { //&& post.category
+  if (post && post.title && post.header_image && categories) { //&& post.categories
     return (
       <>
         <Content></Content>
@@ -205,7 +205,7 @@ export default function Post() {
   function PostMeta() {
     return <p className="post-meta">
       <span className="post-cats"><i className="fa fa-folder" />
-      {/* <Link to={process.env.REACT_APP_CATEGORY_PREFIX + postCategory().slug} rel="category">{postCategory().name}</Link> */}
+      <Link to={process.env.REACT_APP_CATEGORY_PREFIX + postCategory().slug} rel="category">{postCategory().name}</Link>
       </span>
     </p>
   }
@@ -213,7 +213,7 @@ export default function Post() {
     return <nav id="crumbs"><Link rel="home" to="/">
         <span className="fa fa-home" aria-hidden="true" /> Home</Link>
         <span className="delimiter">/</span>
-        {/* <a rel="category" href={process.env.REACT_APP_CATEGORY_PREFIX + postCategory().slug}>{postCategory().name}</a> */}
+        <a rel="category" href={process.env.REACT_APP_CATEGORY_PREFIX + postCategory().slug}>{postCategory().name}</a>
         <span className="delimiter">/<span className="current">{post.title}</span></span>
       </nav>
   }

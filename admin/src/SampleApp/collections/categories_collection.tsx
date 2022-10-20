@@ -19,53 +19,26 @@ export const productExtraActionBuilder = ({
     );
 };
 
-export const localeCollection = buildCollection<Locale>({
-    path: "locales",
-    customId: locales,
-    name: "Locales",
-    singularName: "Locale",
-    properties: {
-        name: {
-            name: "Name",
-            validation: { required: true },
-            dataType: "string"
-        },
-        description: {
-            name: "Description",
-            validation: { required: true },
-            dataType: "string",
-            multiline: true
-        },
-        selectable: {
-            name: "Selectable",
-            description: "Is this locale selectable",
-            longDescription: "Changing this value triggers a cloud function that updates the parent product",
-            dataType: "boolean"
-        }
-    }
-});
-
-
-export const categoryCallbacks: EntityCallbacks<Category> = {
-    onPreSave: ({
-                    collection,
-                    path,
-                    entityId,
-                    values,
-                    status
-                }) => {
-        //values.uppercase_name = values?.name?.toUpperCase();
-        return values;
-    }
-};
+// export const categoryCallbacks: EntityCallbacks<Category> = {
+//     onPreSave: ({
+//                     collection,
+//                     path,
+//                     entityId,
+//                     values,
+//                     status
+//                 }) => {
+//         //values.uppercase_name = values?.name?.toUpperCase();
+//         return values;
+//     }
+// };
 
 export const categoriesCollection = buildCollection<Product>({
     path: "categories",
-    callbacks: categoryCallbacks,
+    // callbacks: categoryCallbacks,
     name: "Categories",
     singularName: "Category",
-    group: "Main",
-    icon: "Category",
+    group: "Blog",
+    icon: "List",
     description: "Blog Categories",
     textSearchEnabled: true,
     permissions: ({

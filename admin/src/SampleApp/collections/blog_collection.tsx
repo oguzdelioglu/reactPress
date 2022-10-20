@@ -109,7 +109,7 @@ export const blogCollection = buildCollection<BlogEntry>({
     //     delete: authController.extra?.roles.admin,
     // }),
     singularName: "Blog entry",
-    group: "Content",
+    group: "Blog",
     icon: "Article",
     exportable: {
         additionalFields: [sampleAdditionalExportColumn]
@@ -212,7 +212,7 @@ export const blogCollection = buildCollection<BlogEntry>({
         }),
         categories: {
             dataType: "array",
-            name: "Categories",
+            name: "Category",
             description: "Choose categories",
             of: {
               dataType: "reference",

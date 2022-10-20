@@ -2,7 +2,7 @@ import store from '../../stores/index.js';
 import { config } from "./config.js";
 import { initializeApp } from "firebase/app";
 import { getStorage , ref , getDownloadURL  } from "firebase/storage";
-import { getFirestore, collection, getDocs,query,orderBy,limit, startAfter, where  } from 'firebase/firestore';
+import { getFirestore, collection, getDocs,query,orderBy,limit, startAfter, where, DocumentReference , doc , getDoc  } from 'firebase/firestore';
 import { updateSnapshots } from "../../stores/global.js";
 
 // const store = require('../stores/index.js');
@@ -49,7 +49,7 @@ export const fetchPost = async (post_url) => {
   return post;
 }
 
-export const fetchPosts = async (isFirst=false,category_slug=null) => {
+export const fetchPosts = async (isFirst=false,category_id=null) => {
   const postPerPage = store.getState().global.postPerPage
   const documentSnapshots = store.getState().global.documentSnapshots
   const queryConstraints = []
@@ -58,7 +58,13 @@ export const fetchPosts = async (isFirst=false,category_slug=null) => {
   console.log("last", lastVisible)
   console.log("postPerPage",postPerPage)
 
-  if (category_slug != null) queryConstraints.push(where('category', '==', category_slug))
+
+  if (category_id != null) {
+    const categoryDocRef = doc(db, "categories", category_id);
+    //const docSnap = await getDoc(categoryDocRef);
+    queryConstraints.push(where('categories', 'array-contains', categoryDocRef))
+  }
+  
 
   if(isFirst) {
     console.log("First Loaded")

@@ -24,9 +24,19 @@ export function slugify(string) {
     return text
   }
 
+  export function goTop() {
+    const body = document.querySelector('#root');
+    body.scrollIntoView({
+        behavior: 'smooth'
+    }, 500)
+  }
+
   export function getCategory(id) {
+    const pathID = id[0].id;
+    // console.log("kategori id",pathID)
     const categories = store.getState().global.categories;
-    const category = categories.filter((category) => category.id === id).pop()
+    const category = categories.filter((category) => category.id === pathID).pop()
+    // console.log("kategori geldi hanım",category)
     return category
   }
 
