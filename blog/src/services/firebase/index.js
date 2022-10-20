@@ -2,7 +2,7 @@ import store from '../../stores/index.js';
 import { config } from "./config.js";
 import { initializeApp } from "firebase/app";
 import { getStorage , ref , getDownloadURL  } from "firebase/storage";
-import { getFirestore, collection, getDocs,query,orderBy,limit, startAfter, where, DocumentReference , doc , getDoc  } from 'firebase/firestore';
+import { getFirestore, collection, getDocs,query,orderBy,limit, startAfter, where , doc } from 'firebase/firestore';
 import { updateSnapshots } from "../../stores/global.js";
 
 // const store = require('../stores/index.js');

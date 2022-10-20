@@ -160,7 +160,7 @@ export const blogCollection = buildCollection<BlogEntry>({
                 },
                 draft: "Draft"
             },
-            defaultValue: "draft"
+            defaultValue: "published"
         })),
         created_on: {
             name: "Created on",
@@ -251,7 +251,7 @@ export const blogCollection = buildCollection<BlogEntry>({
         }),
     },
     initialFilter: {
-        status: ["==", "published"]
+        // status: ["==", "published"]
     },
     callbacks: blogCallbacks
 });
