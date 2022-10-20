@@ -1,11 +1,16 @@
 import {
     buildCollection,
     buildProperty,
-    ExportMappingFunction
+    ExportMappingFunction,
+    EntityOnSaveProps,
+    buildEntityCallbacks,
+    EntityOnDeleteProps,
+    EntityOnFetchProps,
+    EntityIdUpdateProps,
+    toSnakeCase
 } from "@camberi/firecms";
 import { useEffect } from "react";
 import { BlogEntryPreview } from "../custom_entity_view/BlogEntryPreview";
-import { FieldDescription, FieldProps } from "@camberi/firecms";
 import { TextField } from "@mui/material";
 
 export type BlogEntry = {
@@ -63,6 +68,26 @@ const sampleAdditionalExportColumn: ExportMappingFunction = {
     }
 };
 
+const blogCallbacks = buildEntityCallbacks({
+    onPreSave: ({
+        collection,
+        path,
+        entityId,
+        values,
+        status
+    }) => {
+        console.log("Veri Değerleri",values)
+        if (!values.link && values.title !== "") {
+            console.log("Link Belirtmediğin için link oluşturuyorum.")
+            values.link = values.title?.replace(/\s/g, "-").replace(/-+/g, "-").replace(/[^a-å0-9-]/gi, "").toLowerCase()
+            console.log("Oluşturduğum Link:",values.link)
+        }
+        return values;
+    }
+});
+
+
+
 export const blogCollection = buildCollection<BlogEntry>({
     path: "blog",
     name: "Blog",
@@ -106,7 +131,7 @@ export const blogCollection = buildCollection<BlogEntry>({
         }),
         link: buildProperty({
             name: "Link",
-            validation: { required: true },
+            validation: { required: false },
             dataType: "string"
         }),
         header_image: buildProperty({
@@ -114,6 +139,7 @@ export const blogCollection = buildCollection<BlogEntry>({
             dataType: "string",
             storage: {
                 storagePath: "images",
+                storeUrl: true, //Full Image Url Store
                 acceptedFiles: ["image/*"],
                 metadata: {
                     cacheControl: "max-age=1000000"
@@ -158,6 +184,7 @@ export const blogCollection = buildCollection<BlogEntry>({
                             storage: {
                                 storagePath: "images",
                                 acceptedFiles: ["image/*"],
+                                storeUrl: true, //Full Image Url Store
                                 metadata: {
                                     cacheControl: "max-age=1000000"
                                 }
@@ -214,5 +241,7 @@ export const blogCollection = buildCollection<BlogEntry>({
     },
     initialFilter: {
         status: ["==", "published"]
-    }
+    },
+    callbacks: blogCallbacks
 });
+

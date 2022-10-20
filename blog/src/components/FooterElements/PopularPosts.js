@@ -11,7 +11,7 @@ export default function PopularPosts({maxPost}) {
     </div>
     <div className="footer-widget-container">
     <ul>
-        {[...posts].sort(function (a, b) {  return b.hit - a.hit;  }).slice(0, maxPost).map((post) => <FooterArticle key={post.id} post={post}></FooterArticle>)}
+        {[...posts].sort(function (a, b) {  return b.hit - a.hit;  }).slice(0, maxPost).map((post,index) => <FooterArticle key={index} post={post}></FooterArticle>)}
     </ul>
     <div className="clear"></div>
     </div>

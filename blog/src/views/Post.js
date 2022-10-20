@@ -10,9 +10,9 @@ import { getImage } from '../services/firebase'
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export default function Post() {
-  const [contentIndex, setContentIndex ] = useState(0);
-  const [imgUrls, setImgUrl] = useState([]);
-  const [contents, setContent] = useState([]);
+  // const [contentIndex, setContentIndex ] = useState(0);
+  // const [imgUrls, setImgUrl] = useState([]);
+  // const [contents, setContent] = useState([]);
   const [post, setPost] = useState()
   const dispatch = useDispatch()
   const categories = useSelector((state) => state.global.categories)
@@ -29,11 +29,11 @@ export default function Post() {
   //   return category
   // }
 
-  const getImageUrl = (imgUrl) => {
-    const result = imgUrls.filter(img => img.id === imgUrl).shift()
-    // console.log("Resim Arama SOnucu",result,imgUrl)
-    return result;
-  }
+  // const getImageUrl = (imgUrl) => {
+  //   const result = imgUrls.filter(img => img.id === imgUrl).shift()
+  //   // console.log("Resim Arama SOnucu",result,imgUrl)
+  //   return result;
+  // }
   //Get Post Data
   useEffect(() => {
     console.log("Post Link ->",post_url)
@@ -54,14 +54,14 @@ export default function Post() {
 
   },[post_url, posts]);
     //Get Post Data
-  useEffect(() => {
-    console.log("IMG LER ",imgUrls)
-  },[imgUrls]);
+  // useEffect(() => {
+  //   console.log("IMG LER ",imgUrls)
+  // },[imgUrls]);
 
 
-  useEffect(() => {
-    console.log("Content Güncellendi",contents)
-  },[contents]);
+  // useEffect(() => {
+  //   console.log("Content Güncellendi",contents)
+  // },[contents]);
 
 
   //Metadata Update After Post data received
@@ -80,18 +80,18 @@ export default function Post() {
       }
       console.log("New Metadata:",meta)
       dispatch(updateMetadata(meta))
-      getImage(post.header_image).then(result =>{ setImgUrl(images => [...images, {id: post.header_image ,image:result}])})
-      post.content.map(async function(data) {
-        if(data.type === 'text') {
-          return setContent(contents => [...contents, { type: data.type, value: data.value }])
-        } else if(data.type === 'images') {
-          data.value.map(async function(image) {
-          return await getImage(image).then(function (result) {
-              setContent(contents => [...contents, {type: data.type,value: result}])
-            })
-          })
-        }
-      })
+      // getImage(post.header_image).then(result =>{ setImgUrl(images => [...images, {id: post.header_image ,image:result}])})
+      // post.content.map(async function(data) {
+      //   if(data.type === 'text') {
+      //     return setContent(contents => [...contents, { type: data.type, value: data.value }])
+      //   } else if(data.type === 'images') {
+      //     data.value.map(async function(image) {
+      //     return await getImage(image).then(function (result) {
+      //         setContent(contents => [...contents, {type: data.type,value: result}])
+      //       })
+      //     })
+      //   }
+      // })
     }
   },[dispatch, post])
 
@@ -118,6 +118,16 @@ export default function Post() {
   }
 
   function Content() {
+    const PostContents = post.content.map((content, index) => {
+      switch (content.type) {
+        case 'text':
+          return <div key={index} dangerouslySetInnerHTML={{ __html: content.value }}></div>
+        case 'images':
+          return content.value.map((image, imageIndex) => (<LazyLoadImage key={imageIndex} alt={post.title} src={image}></LazyLoadImage>))
+        default:
+          return null
+      }
+    })
     return <>
     {  NavBar() }
     <article className="post-listing post type-post status-publish format-standard has-post-thumbnail  category-thumbnail tag-article tag-author tag-post tag-video" id="the-post">
@@ -127,19 +137,11 @@ export default function Post() {
         <div className="clear" />
         <div className="entry">
           {/* <div style={{textAlign: 'center'}}> {PreviusNextPosts()}</div> */}
-          { getImageUrl(post.header_image) !== undefined ? <LazyLoadImage width={350} height={350} src={getImageUrl(post.header_image).image} className="attachment-tie-medium size-tie-medium wp-post-image" alt={post.title}/>: ""}
+          {/* { getImageUrl(post.header_image) !== undefined ? <LazyLoadImage width={350} height={350} src={getImageUrl(post.header_image).image} className="attachment-tie-medium size-tie-medium wp-post-image" alt={post.title}/>: ""} */}
+          { post.header_image ? <LazyLoadImage width={350} height={350} src={post.header_image} className="attachment-tie-medium size-tie-medium wp-post-image" alt={post.title}/>: ""}
           <div className="clear" />
           {
-            contents.map((content,index) => { 
-              switch(content.type) {
-                case 'text':
-                  return <div key={index} dangerouslySetInnerHTML={{ __html: content.value }}></div>
-                case 'images':
-                  return <LazyLoadImage key={index} alt={post.title} src={ content.value }></LazyLoadImage>
-                default:
-                  return null
-              }
-            })
+            PostContents
           }
           {/* { PostContent(post.content) } */}
         </div>

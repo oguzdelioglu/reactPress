@@ -36,7 +36,9 @@ export const globalSlice = createSlice({
       action.payload.forEach((doc) => {
         const dataReplaced = doc.data()
         postList.push(Object.assign(dataReplaced,{"id":doc.id,//DATA DOCUMENT ID
-        "publish_date": doc.data().publish_date.toDate().toISOString().substring(0,10)})) //TIMESTAMP REPLACE
+        "publish_date": doc.data().publish_date.toDate().toISOString().substring(0,10),
+        "created_on": doc.data().created_on.toDate().toISOString().substring(0,10)
+        })) //TIMESTAMP REPLACE
       });
       //Update Snapshot Data Object End
       console.log("Gelen Veri",postList)

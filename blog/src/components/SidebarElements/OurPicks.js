@@ -10,7 +10,7 @@ export default function OurPicks() {
             <h2>Our Picks</h2>
             <div className="stripe-line" /></div>
 
-            { [...posts].sort(() => Math.random() - 0.5).slice(0, 2).map((post) => <PickWidget key={post.id} post={post}></PickWidget>) }
+            { [...posts].sort(() => Math.random() - 0.5).slice(0, 2).map((post,index) => <PickWidget key={index} post={post}></PickWidget>) }
     </div>
   )
 }
