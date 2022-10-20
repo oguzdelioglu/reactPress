@@ -7,7 +7,8 @@ import {
     EntityOnDeleteProps,
     EntityOnFetchProps,
     EntityIdUpdateProps,
-    toSnakeCase
+    toSnakeCase,
+    EntityReference
 } from "@camberi/firecms";
 import { useEffect } from "react";
 import { BlogEntryPreview } from "../custom_entity_view/BlogEntryPreview";
@@ -18,6 +19,7 @@ export type BlogEntry = {
     link: string,
     header_image: string,
     content: any[],
+    categories: EntityReference[];
     created_on: Date,
     publish_date: Date,
     reviewed: boolean,
@@ -209,6 +211,15 @@ export const blogCollection = buildCollection<BlogEntry>({
                 }
             }
         }),
+        categories: {
+            dataType: "array",
+            name: "Categories",
+            description: "Choose categories",
+            of: {
+              dataType: "reference",
+              path: "categories"
+            }
+        },
         publish_date: buildProperty({
             name: "Publish date",
             dataType: "date",
@@ -226,7 +237,7 @@ export const blogCollection = buildCollection<BlogEntry>({
                 dataType: "string",
                 previewAsTag: true
             },
-            defaultValue: ["default tag"]
+            defaultValue: []
         },
         hit: buildProperty({
             name: "Hit",
