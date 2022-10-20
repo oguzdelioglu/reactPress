@@ -29,3 +29,8 @@ export type Locale = {
     selectable?: boolean,
     video: string
 }
+
+export type Category = {
+    name: string,
+    slug: string
+}

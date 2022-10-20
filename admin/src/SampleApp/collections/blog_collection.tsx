@@ -96,7 +96,6 @@ export const blogCollection = buildCollection<BlogEntry>({
     permissions: ({
         authController
     }) => {
-        console.log("isAdmin:",authController.extra?.roles)
         const isAdmin = authController.extra?.roles.includes("admin");
         return ({
         edit: isAdmin,
@@ -217,7 +216,8 @@ export const blogCollection = buildCollection<BlogEntry>({
             description: "Choose categories",
             of: {
               dataType: "reference",
-              path: "categories"
+              path: "categories",
+              previewProperties: ["name"]
             }
         },
         publish_date: buildProperty({
