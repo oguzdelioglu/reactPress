@@ -22,15 +22,12 @@ export default function Home() {
   useEffect(()=> {
     setLoading(true)
     if(firstLoad) {
-      //First load metadata settings
       getSettings().then((settings) => {
-        console.log("Home Meta Yüklendi",settings);
         dispatch(updateMetadata(settings));
         return settings;
       });
     }
     fetchPosts(firstLoad).then((data)=> {
-      console.log("All Posts Received:",data)
       if(data.size === 0){
         console.log("Son Sayfa")
         setlastPage(true)
@@ -40,7 +37,6 @@ export default function Home() {
       setFirstLoad(false)
       setLoading(false)
     })
-    
   },[lastVisible]);
  
   return (

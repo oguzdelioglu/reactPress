@@ -42,16 +42,13 @@ export default function Category() {
   useEffect(()=> {
     setLoading(true)
     if(categories.length === 0) {
-      console.log("Henüz kategoriler Yüklenmedi")
     } else {
-      console.log("Kategoriler Yüklendi.",categories)
       const category_id = getCategoryBySlug(category_slug).id;
       console.log(category_slug)
       console.log(category_id)
       fetchPosts(firstLoad,category_id).then((data)=> {
-        console.log("All Posts Received:",data)
         if(data.size === 0){
-          console.log("Son Sayfa")
+          console.log("Last page")
           setLastPage(true)
         } else {
           dispatch(updatePosts(data))

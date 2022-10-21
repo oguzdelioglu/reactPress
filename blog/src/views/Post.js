@@ -70,6 +70,7 @@ export default function Post() {
     if(data) {
       console.log("Storedan Çektim")
       setPost(data)
+      console.log(data)
       updateMeta(data)
     } else {
       console.log("DB DEN Çektim")

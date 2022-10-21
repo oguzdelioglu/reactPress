@@ -75,7 +75,7 @@ export const getImage = async (url) => {
 export const fetchCategories = async () => {
   const Snapshot = await getDocs(categoryCollection);
   const List = Snapshot.docs.map(doc => Object.assign(doc.data(),{"id":doc.id}));
-  console.log("Kategoriler:",List)
+  console.log("Categories:",List)
   return List;
 }
 
@@ -92,7 +92,7 @@ export const fetchPosts = async (isFirst=false,category_id=null) => {
   const queryConstraints = []
   // const lastVisible = posts && posts.length>0 ? posts[posts.length - 1]:{date:null};
   const lastVisible = documentSnapshots && documentSnapshots.docs ? documentSnapshots.docs[documentSnapshots.docs.length-1] : {};
-  console.log("last", lastVisible)
+  console.log("Last", lastVisible)
   console.log("postPerPage",postPerPage)
 
 
@@ -104,15 +104,15 @@ export const fetchPosts = async (isFirst=false,category_id=null) => {
   
 
   if(isFirst) {
-    console.log("First Loaded")
+    console.log("First load.")
     // Query the first page of docs
     let first = query(postCollection,orderBy("publish_date"),limit(postPerPage), ...queryConstraints)
     const data = await getDocs(first)
-    console.log("Fetch Post Data:",data)
+    // console.log("Fetch Post Data:",data)
     store.dispatch(updateSnapshots(data))
     return data;
   } else {
-    console.log("Next Page Loaded")
+    console.log("Next page loaded.")
     const next = query(postCollection,orderBy("publish_date"),startAfter(lastVisible),limit(postPerPage), ...queryConstraints);
     const data = await getDocs(next)
     store.dispatch(updateSnapshots(data))

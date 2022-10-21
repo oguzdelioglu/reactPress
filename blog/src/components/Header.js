@@ -15,7 +15,6 @@ export default function Header() {
   };
   useEffect(() => {
     fetchCategories().then(data=> {
-      console.log("Categories Loaded.")
       dispatch(updateCategories(data))
     })
   },[])

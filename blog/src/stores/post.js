@@ -7,7 +7,6 @@ export const postSlice = createSlice({
   },
   reducers: {
     updatePost: (state, action) => {
-      console.log("Gelen Veri:",action.payload)
       state.post.value = action.payload
     },
   },
