@@ -32,7 +32,7 @@ export const productExtraActionBuilder = ({
 //     }
 // };
 
-export const categoriesCollection = buildCollection<Product>({
+export const categoriesCollection = buildCollection<Category>({
     path: "categories",
     // callbacks: categoryCallbacks,
     name: "Categories",

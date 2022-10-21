@@ -34,3 +34,15 @@ export type Category = {
     name: string,
     slug: string
 }
+
+export type Setting = {
+    title: string,
+    description: string,
+    keywords: string,
+    author: string,
+    canonical: string,
+    site_header_meta: string,
+    site_ads_300_250: string,
+    site_ads_fluid: string,
+    site_ads_responsive: string
+}

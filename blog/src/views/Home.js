@@ -5,6 +5,9 @@ import { fetchPosts } from '../services/firebase'
 import Article from '../components/Article';
 import Pagination from '../components/Pagination';
 import { updatePosts } from '../stores/global';
+import { getSettings } from '../services/firebase';
+import { updateMetadata } from '../stores/global';
+
 export default function Home() {
   // const postPerPage = useSelector((state) => state.global.postPerPage)
   const [firstLoad,setFirstLoad] = useState(true)
@@ -18,6 +21,14 @@ export default function Home() {
 
   useEffect(()=> {
     setLoading(true)
+    if(firstLoad) {
+      //First load metadata settings
+      getSettings().then((settings) => {
+        console.log("Home Meta Yüklendi",settings);
+        dispatch(updateMetadata(settings));
+        return settings;
+      });
+    }
     fetchPosts(firstLoad).then((data)=> {
       console.log("All Posts Received:",data)
       if(data.size === 0){

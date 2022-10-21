@@ -15,6 +15,7 @@ import { usersCollection } from "./collections/users_collection";
 import { productsCollection } from "./collections/products_collection";
 import { blogCollection } from "./collections/blog_collection";
 import { categoriesCollection } from "./collections/categories_collection";
+import { settingsCollection } from "./collections/settings_collection";
 import { showcaseCollection } from "./collections/showcase_collection";
 
 import { textSearchController } from "./text_search";
@@ -74,6 +75,7 @@ function SampleApp() {
         // usersCollection,
         blogCollection,
         categoriesCollection,
+        settingsCollection,
         // showcaseCollection
     ];
 

@@ -9,19 +9,20 @@ export const globalSlice = createSlice({
     lastVisible: 0,
     categories : [],
     meta : {
-        title: 'Testing',
-        description: 'Testing Description',
+        title: '',
+        description: '',
         canonical: '',
         meta: {
           charset: '',
           name: {
-            keywords: 'testing,testing2,testing3'
+            keywords: ''
           }
         }
     }
   },
   reducers: {
     updateMetadata: (state, action) => {
+      console.log("Last Metadata",action.payload)
       state.meta = action.payload
     },
     updateCategories: (state, action) => {

@@ -1,22 +1,20 @@
 // import { useSelector } from 'react-redux'
 import React, { useState,useEffect } from 'react'
+import moment from 'moment'
 import { fetchPost } from '../services/firebase'
 // import { useDispatch } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
-import { slugify, getCategory } from '../util'
+import { getCategory } from '../util'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateMetadata } from '../stores/global';
-import { getImage } from '../services/firebase'
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export default function Post() {
-  // const [contentIndex, setContentIndex ] = useState(0);
-  // const [imgUrls, setImgUrl] = useState([]);
-  // const [contents, setContent] = useState([]);
   const [post, setPost] = useState()
   const dispatch = useDispatch()
   const categories = useSelector((state) => state.global.categories)
   const posts = useSelector((state) => state.global.posts)
+  const meta = useSelector((state) => state.global.meta)
   const { post_url } = useParams()
   const postCategory = () =>{
     return getCategory(post.categories);
@@ -24,87 +22,68 @@ export default function Post() {
   const previusPost = ""
   const nextPost = ""
 
-  // const getCategory =(id)=>{
-  //   const category = categories.filter((category) => category.id === id).pop()
-  //   return category
-  // }
+  const getDate = (unix) => {
+    console.log("Saniye bu:",unix)
+    const newDate = moment(unix * 1000).format()
+    console.log("new Date:",newDate)
+    return newDate;  
+  }
 
-  // const getImageUrl = (imgUrl) => {
-  //   const result = imgUrls.filter(img => img.id === imgUrl).shift()
-  //   // console.log("Resim Arama SOnucu",result,imgUrl)
-  //   return result;
-  // }
+  const updateMeta = (data)=> {
+    const postData = data;
+    const postInfo = {
+      title: postData.title,
+      description: postData.title,
+      canonical: window.location.href,
+      meta: {
+          charSet: 'utf-8',
+          name: {
+              keywords: postData.tags.join(","),
+              robots: "index, follow"
+          },
+          property: {
+              'og:title': postData.title,
+              'og:type': 'article',
+              'og:image': postData.header_image,
+              // 'og:image:width': '',
+              // 'og:image:height': '',
+              'twitter:title': postData.title,
+              'twitter:description': postData.title,
+              'article:published_time': getDate(postData.publish_date.seconds),
+              'article:author': 'admin',
+              'article:tag': postData.tags.join(",")
+          }
+      }
+    };
+    const lastData = {...meta,...postInfo};
+    //console.log("Son Veri",lastData)
+    dispatch(updateMetadata(lastData));
+    return lastData
+  }
+
   //Get Post Data
   useEffect(() => {
     console.log("Post Link ->",post_url)
     console.log("Posts",posts)
-    const isExist = posts.filter(post=> post.link === post_url).shift()
-    console.log(isExist)
-    if(isExist) {
+    const data = posts.filter(post=> post.link === post_url).shift()
+    console.log(data)
+    if(data) {
       console.log("Storedan Çektim")
-      setPost(isExist)
+      setPost(data)
+      updateMeta(data)
     } else {
       console.log("DB DEN Çektim")
       fetchPost(post_url).then(data => {
         console.log("Gelen Data",data)
         setPost(data)
         return data;
+      }).then((data)=> {
+        console.log("Home Meta Yüklendi");
+        updateMeta(data)
       })
     }
-
   },[post_url, posts]);
-    //Get Post Data
-  // useEffect(() => {
-  //   console.log("IMG LER ",imgUrls)
-  // },[imgUrls]);
 
-
-  // useEffect(() => {
-  //   console.log("Content Güncellendi",contents)
-  // },[contents]);
-
-
-  //Metadata Update After Post data received
-  useEffect(()=> {
-    if(post && post.title && post.header_image) {
-      const meta =  {
-        title: post.title,
-        description: post.title,
-        canonical: window.location.href,
-        meta: {
-          charset: 'UTF-8',
-          name: {
-            keywords: post.tags.join(",")
-          }
-        }
-      }
-      console.log("New Metadata:",meta)
-      dispatch(updateMetadata(meta))
-      // getImage(post.header_image).then(result =>{ setImgUrl(images => [...images, {id: post.header_image ,image:result}])})
-      // post.content.map(async function(data) {
-      //   if(data.type === 'text') {
-      //     return setContent(contents => [...contents, { type: data.type, value: data.value }])
-      //   } else if(data.type === 'images') {
-      //     data.value.map(async function(image) {
-      //     return await getImage(image).then(function (result) {
-      //         setContent(contents => [...contents, {type: data.type,value: result}])
-      //       })
-      //     })
-      //   }
-      // })
-    }
-  },[dispatch, post])
-
-
-  // useEffect(() => {
-  //   console.log("Post Link ->",post_link)
-  //   const data = fetchPost(post_link).then(data=> {
-  //     //console.log(data);
-  //     return data;
-  //   })
-  //   dispatch(updatePost(data))
-  // }, []);
-  
   if (post && post.title && post.header_image && categories) { //&& post.categories
     return (
       <>
@@ -151,21 +130,6 @@ export default function Post() {
     </article>
       {PostTags()}
     </>
-
-
-  }
-
-
-  function PostContent(content) {
-    console.log("Gelen Content",content)
-    content.map(function(data,index) {
-      console.log("Valuesi",data.type)
-      if(data.type === 'text') {
-        console.log("Textteyim",data.value)
-        return <div key={index} dangerouslySetInnerHTML={{ __html: data.value }}></div>
-      }
-      //if(data.type === 'images') data.value.map((image,imgIndex) => (<img key={imgIndex} alt={post.title} src={ image }></img>))
-    })
   }
 
   function Title() {

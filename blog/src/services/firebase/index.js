@@ -22,7 +22,44 @@ const categoryCollection = collection(db, 'categories');
 export const getSettings = async () => {
   const Snapshot = await getDocs(settingCollection);
   const List = Snapshot.docs.map(doc => doc.data());
-  return List[0];
+  const Data = List[0];
+  const meta = {
+    title: Data.title,
+    description: Data.description,
+    canonical: Data.canonical,
+    meta: {
+        charSet: 'utf-8',
+        name: {
+            keywords: Data.keywords,
+            robots: "index, follow"
+        },
+        // property: {
+        //     'og:title': '',
+        //     'og:type': '',
+        //     'og:image': '',
+        //     'og:image:width': '',
+        //     'og:image:height': '',
+        //     'twitter:title': 'pin_title',
+        //     'twitter:description': 'pin_title',
+        //     'article:published_time': 'post_date',
+        //     'article:author': 'author',
+        //     'article:tag': 'pin tag'
+        // }
+        // <meta property="og:type" content="article" />
+        // <meta property="og:locale" content="en_US" />
+        // <meta property="og:title" content="pin_title" />
+        // <meta property="og:description" content="pin_title" />
+        // <meta property="og:image" content="img" />
+        // <meta property="og:image:width" content="w" />
+        // <meta property="og:image:height" content="h" />
+        // <meta property="twitter:title" content="pin_title" />
+        // <meta property="twitter:description" content="pin_title" />
+        // <meta property="article:published_time" content="post_date" />
+        // <meta property="article:author" content="author" />
+        // <meta property="article:tag" content="pintag" />
+    }
+  };
+  return meta;
 }
 
 

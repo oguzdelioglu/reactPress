@@ -34,7 +34,7 @@ export default function Header() {
             <div className="logo">
               <h1> <a rel="home" href="/">
                   {/* eslint-disable-next-line */}
-                  <img src="/css/images/logo.png" width="175" height="44" /><strong />
+                  <img src="/css/images/logo.png" alt="logo" width="175" height="44" /><strong />
                 </a>
               </h1>
             </div>

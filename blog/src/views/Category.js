@@ -7,20 +7,33 @@ import Pagination from '../components/Pagination';
 import { updatePosts,clearPosts } from '../stores/global';
 import { useParams } from 'react-router-dom';
 import { getCategoryBySlug } from '../util';
+import { updateMetadata } from '../stores/global';
+
 export default function Category() {
   const [firstLoad,setFirstLoad] = useState(true)
-  const [lastPage,setlastPage] = useState(false)
+  const [lastPage,setLastPage] = useState(false)
   const [loading,setLoading] = useState(false)
   const posts = useSelector((state) => state.global.posts)
   const categories = useSelector((state) => state.global.categories)
-  const lastVisible = useSelector((state) => state.global.lastVisible)
   const dispatch = useDispatch()
   const { category_slug } = useParams()
 
-  // useEffect(()=> {
-
-
-  // },[firstLoad])
+  const updateMeta = ()=> {
+    const postInfo = {
+      title: category_slug,
+      description: category_slug,
+      canonical: window.location.href,
+      meta: {
+          charSet: 'utf-8',
+          name: {
+              keywords: category_slug,
+              robots: "index, follow"
+          },
+      }
+    };
+    dispatch(updateMetadata(postInfo));
+    return postInfo
+  }
 
   useEffect(()=> {
     dispatch(clearPosts())
@@ -35,28 +48,21 @@ export default function Category() {
       const category_id = getCategoryBySlug(category_slug).id;
       console.log(category_slug)
       console.log(category_id)
-      // if(firstLoad) {
-      //   console.log("İlk Yüklemede Postları Sildiriyoruz.")
-      //   dispatch(clearPosts())
-      // }
       fetchPosts(firstLoad,category_id).then((data)=> {
         console.log("All Posts Received:",data)
         if(data.size === 0){
           console.log("Son Sayfa")
-          setlastPage(true)
+          setLastPage(true)
         } else {
           dispatch(updatePosts(data))
+          updateMeta()
         }
         setFirstLoad(false)
         setLoading(false)
       })
     }
-    // setTimeout(() => { // simulate a delay
-
-    // }, 3000);
-    
   },[categories]);
-
+  
   return (
     <>
       <div className="post-listing archive-box">
