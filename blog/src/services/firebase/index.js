@@ -1,5 +1,5 @@
 import store from '../../stores/index.js';
-import { firebaseConfig } from "../../config/firebase_config";
+import { firebaseConfig } from "../../config/firebase_config.ts";
 import { initializeApp } from "firebase/app";
 import { getStorage , ref , getDownloadURL  } from "firebase/storage";
 import { getFirestore, collection, getDocs,query,orderBy,limit, startAfter, where , doc } from 'firebase/firestore';
