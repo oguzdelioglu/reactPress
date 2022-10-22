@@ -7,7 +7,7 @@ import { Authenticator, CMSView, FirebaseCMSApp } from "@camberi/firecms";
 import { IconButton, Tooltip } from "@mui/material";
 import { GitHub } from "@mui/icons-material";
 
-import { firebaseConfig } from "../firebase_config";
+import { firebaseConfig } from "../config/firebase_config";
 import { ExampleCMSView } from "./ExampleCMSView";
 import logo from "./images/demo_logo.png";
 import { testCollection } from "./collections/test_collection";

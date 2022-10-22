@@ -1,5 +1,5 @@
 import store from '../../stores/index.js';
-import { config } from "./config.js";
+import { firebaseConfig } from "../../config/firebase_config";
 import { initializeApp } from "firebase/app";
 import { getStorage , ref , getDownloadURL  } from "firebase/storage";
 import { getFirestore, collection, getDocs,query,orderBy,limit, startAfter, where , doc } from 'firebase/firestore';
@@ -11,7 +11,7 @@ import { updateSnapshots } from "../../stores/global.js";
 // const { initializeApp } = require('firebase/app');
 
 // Initialize Firebase
-const app = initializeApp(config);
+const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 const postCollection = collection(db,"blog");
