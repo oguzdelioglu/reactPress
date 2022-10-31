@@ -4,7 +4,7 @@ import moment from 'moment'
 import { fetchPost } from '../services/firebase'
 // import { useDispatch } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
-import { getCategory } from '../util'
+import { getCategory, goTop } from '../util'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateMetadata } from '../stores/global';
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -142,7 +142,7 @@ export default function Post() {
   function PostTags() {
     return <p className="post-tag">Tags
       {post.tags.map((tag,index) => (
-        <Link key={index} to={process.env.REACT_APP_SEARCH_PREFIX + tag} rel="nofollow">{tag}</Link>
+        <Link onClick={() => goTop()} key={index} to={process.env.REACT_APP_SEARCH_PREFIX + tag} rel="nofollow">{tag}</Link>
       ))}
     </p>
   }

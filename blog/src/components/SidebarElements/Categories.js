@@ -1,5 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { goTop } from '../../util'
 
 export default function Categories() {
     const categories = useSelector((state) => state.global.categories)
@@ -13,7 +14,7 @@ export default function Categories() {
       <ul>
         {
           categories.map((category,index)=> (
-            <li key={index} className="cat-item"><a rel="category" href={process.env.REACT_APP_CATEGORY_PREFIX + category.slug}>{category.name}</a></li>
+            <li onClick={() => goTop()} key={index} className="cat-item"><a rel="category" href={process.env.REACT_APP_CATEGORY_PREFIX + category.slug}>{category.name}</a></li>
           ))
         }
       

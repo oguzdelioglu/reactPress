@@ -1,0 +1,13 @@
+{
+    "name": "reactpress",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+      "react-scripts": "5.0.1"
+    },
+    "scripts": {
+      "start": "(cd blog && export PORT=80 && react-scripts start) & (cd admin && export PORT=81 && react-scripts start)",
+      "deploy": "npm run start && firebase deploy"
+    }
+  }
+  
