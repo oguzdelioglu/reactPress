@@ -2,7 +2,7 @@ import store from '../../stores/index.js';
 import { firebaseConfig } from "../../config/firebase_config.ts";
 import { initializeApp } from "firebase/app";
 import { getStorage , ref , getDownloadURL  } from "firebase/storage";
-import { getFirestore, collection, getDocs,query,orderBy,limit, startAfter, where , doc } from 'firebase/firestore';
+import { getFirestore, collection, getDocs,query,orderBy,limit, startAfter, where , doc, endBefore } from 'firebase/firestore';
 import { updateSnapshots } from "../../stores/global.js";
 
 // const store = require('../stores/index.js');
@@ -106,18 +106,38 @@ export const fetchPosts = async (isFirst=false,category_id=null) => {
   if(isFirst) {
     console.log("First load.")
     // Query the first page of docs
-    let first = query(postCollection,orderBy("publish_date"),limit(postPerPage), ...queryConstraints)
+    let first = query(postCollection,orderBy("publish_date","desc"),limit(postPerPage), ...queryConstraints)
     const data = await getDocs(first)
     // console.log("Fetch Post Data:",data)
     store.dispatch(updateSnapshots(data))
     return data;
   } else {
     console.log("Next page loaded.")
-    const next = query(postCollection,orderBy("publish_date"),startAfter(lastVisible),limit(postPerPage), ...queryConstraints);
+    const next = query(postCollection,orderBy("publish_date","desc"),startAfter(lastVisible),limit(postPerPage), ...queryConstraints);
     const data = await getDocs(next)
     store.dispatch(updateSnapshots(data))
     return data;
   }
+}
+
+export const getPreviousPost = async (docID) => {
+  console.log("Aranan",docID)
+  const documentSnapshots = store.getState().global.documentSnapshots
+  console.log("documentSnapshots",documentSnapshots)
+  const postDocument = documentSnapshots && documentSnapshots.docs ? documentSnapshots.docs.find(x => x.id === docID.id) : {};
+  console.log("postDocument",postDocument)
+  const nextQuery = query(postCollection,orderBy("publish_date"),startAfter(postDocument),limit(1));
+  const previousQuery = query(postCollection,orderBy("publish_date","desc"),startAfter(postDocument),limit(1));
+  const nextData = await getDocs(nextQuery)
+  const previousData = await getDocs(previousQuery)
+  console.log("Next Post Data.",nextData.docs)
+  console.log("Previous Post Data", previousData.docs)
+
+  const nextPost = nextData.docs && nextData.docs.length >0 ? nextData.docs.at(0).data() : null
+  const previousPost =previousData.docs && previousData.docs.length>0 ? previousData.docs.at(0).data() : null
+  console.log("Next Post Loaded.",nextPost)
+  console.log("Previous Post.",previousPost)
+  return { nextPost,previousPost };
 }
 
 export const searchKeyword = async (keyword) => {

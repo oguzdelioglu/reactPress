@@ -7,7 +7,7 @@ import { getImage } from '../services/firebase'
 export default function Article({post}) {
   const [imgUrl, setImgUrl] = useState([]);
   const postCategory = () =>{
-    return getCategory(post.category);
+    return getCategory(post.categories);
   }
   
   useEffect(()=> {
@@ -22,7 +22,7 @@ export default function Article({post}) {
             <Link onClick={() => goTop()} to={process.env.REACT_APP_POST_PREFIX + post.link}>{post.title}</Link>
           </h2>
           <p className="post-meta">
-            {/* <span className="post-cats"><i className="fa fa-folder" /><a href={process.env.REACT_APP_CATEGORY_PREFIX  + postCategory().slug } rel="category">{ postCategory().name}</a></span> */}
+            <span className="post-cats"><i className="fa fa-folder" /><a href={process.env.REACT_APP_CATEGORY_PREFIX  + postCategory().slug } rel="category">{ postCategory().name}</a></span>
           </p>
           <div className="post-thumbnail">
             <Link onClick={() => goTop()} title={post.title} to={process.env.REACT_APP_POST_PREFIX + post.link}>

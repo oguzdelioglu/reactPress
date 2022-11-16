@@ -1,16 +1,17 @@
 // import { useSelector } from 'react-redux'
 import React, { useState,useEffect } from 'react'
 import moment from 'moment'
-import { fetchPost } from '../services/firebase'
+import { fetchPost, fetchPosts, getPreviousPost } from '../services/firebase'
 // import { useDispatch } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
 import { getCategory, goTop } from '../util'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateMetadata } from '../stores/global';
+import { updateMetadata, updatePosts } from '../stores/global';
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export default function Post() {
   const [post, setPost] = useState()
+  const [previousNextPost, setPreviousNextPost] = useState()
   const dispatch = useDispatch()
   const categories = useSelector((state) => state.global.categories)
   const posts = useSelector((state) => state.global.posts)
@@ -21,6 +22,15 @@ export default function Post() {
   }
   const previusPost = ""
   const nextPost = ""
+
+  const getPreviousAndNextPosts = (id) => {
+    console.log("Gelen Post",id)
+    getPreviousPost(id).then(data=> {
+      console.log("Önceki Postu Çektim",data)
+      setPreviousNextPost(data)
+      return data;
+    })
+  }
 
   const getDate = (unix) => {
     console.log("Saniye bu:",unix)
@@ -72,18 +82,24 @@ export default function Post() {
       setPost(data)
       console.log(data)
       updateMeta(data)
+      getPreviousAndNextPosts(data)
     } else {
       console.log("DB DEN Çektim")
       fetchPost(post_url).then(data => {
         console.log("Gelen Data",data)
         setPost(data)
+        getPreviousAndNextPosts(data)
         return data;
       }).then((data)=> {
         console.log("Home Meta Yüklendi");
         updateMeta(data)
+      }).then((data)=> {//Fetch Another Posts
+        fetchPosts(true).then((data)=> {
+          dispatch(updatePosts(data))
+        })
       })
     }
-  },[post_url, posts]);
+  },[post_url]);
 
   if (post && post.title && post.header_image && categories) { //&& post.categories
     return (
@@ -116,7 +132,7 @@ export default function Post() {
         {PostMeta()}
         <div className="clear" />
         <div className="entry">
-          {/* <div style={{textAlign: 'center'}}> {PreviusNextPosts()}</div> */}
+          <div style={{textAlign: 'center'}}> {PreviusNextPosts()}</div>
           {/* { getImageUrl(post.header_image) !== undefined ? <LazyLoadImage width={350} height={350} src={getImageUrl(post.header_image).image} className="attachment-tie-medium size-tie-medium wp-post-image" alt={post.title}/>: ""} */}
           { post.header_image ? <LazyLoadImage width={350} height={350} src={post.header_image} className="attachment-tie-medium size-tie-medium wp-post-image" alt={post.title}/>: ""}
           <div className="clear" />
@@ -162,8 +178,8 @@ export default function Post() {
 
   function PreviusNextPosts() {
     return <div>
-      <Link to={process.env.REACT_APP_POST_PREFIX + previusPost} title="previus post"><LazyLoadImage className="alignnone size-medium tie-appear" src="/css/images/previous.gif" alt="previus" width={150} height={55} /></Link>
-      <Link to={process.env.REACT_APP_POST_PREFIX + nextPost} title="next post"><LazyLoadImage className="alignnone size-full tie-appear" src="/css/images/next.gif" alt="next" width={150} height={55} /></Link>
+      { previousNextPost && previousNextPost.previousPost ? <Link to={process.env.REACT_APP_POST_PREFIX + previousNextPost.previousPost.link} title="previus post"><LazyLoadImage className="alignnone size-medium tie-appear" src="/css/images/previous.gif" alt="previus" width={150} height={55} /></Link>:"" }
+      { previousNextPost && previousNextPost.nextPost ? <Link to={process.env.REACT_APP_POST_PREFIX + previousNextPost.nextPost.link} title="next post"><LazyLoadImage className="alignnone size-full tie-appear" src="/css/images/next.gif" alt="next" width={150} height={55} /></Link> :"" }
     </div>
   }
 

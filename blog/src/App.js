@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import { HashRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 
 //MetaData
 import DocumentMeta from 'react-document-meta';
