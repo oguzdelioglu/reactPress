@@ -77,6 +77,7 @@ export default function Post() {
     console.log("Posts",posts)
     const data = posts.filter(post=> post.link === post_url).shift()
     console.log(data)
+    setPreviousNextPost()
     if(data) {
       console.log("Storedan Çektim")
       setPost(data)
@@ -88,9 +89,9 @@ export default function Post() {
       fetchPost(post_url).then(data => {
         console.log("Gelen Data",data)
         setPost(data)
-        getPreviousAndNextPosts(data)
         return data;
       }).then((data)=> {
+        getPreviousAndNextPosts(data)
         console.log("Home Meta Yüklendi");
         updateMeta(data)
       }).then((data)=> {//Fetch Another Posts

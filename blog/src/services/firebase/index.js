@@ -133,8 +133,8 @@ export const getPreviousPost = async (docID) => {
   console.log("Next Post Data.",nextData.docs)
   console.log("Previous Post Data", previousData.docs)
 
-  const nextPost = nextData.docs && nextData.docs.length >0 ? nextData.docs.at(0).data() : null
-  const previousPost =previousData.docs && previousData.docs.length>0 ? previousData.docs.at(0).data() : null
+  const nextPost = nextData.docs && nextData.docs.length > 0 ? nextData.docs.shift().data() : null
+  const previousPost =previousData.docs && previousData.docs.length > 0 ? previousData.docs.shift().data() : null
   console.log("Next Post Loaded.",nextPost)
   console.log("Previous Post.",previousPost)
   return { nextPost,previousPost };
