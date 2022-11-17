@@ -8,6 +8,7 @@ import { getCategory, goTop } from '../util'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateMetadata, updatePosts } from '../stores/global';
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import NotFound from './NotFound'
 
 export default function Post() {
   const [post, setPost] = useState()
@@ -20,22 +21,15 @@ export default function Post() {
   const postCategory = () =>{
     return getCategory(post.categories);
   }
-  const previusPost = ""
-  const nextPost = ""
 
   const getPreviousAndNextPosts = (id) => {
-    console.log("Gelen Post",id)
     getPreviousPost(id).then(data=> {
-      console.log("Önceki Postu Çektim",data)
       setPreviousNextPost(data)
       return data;
     })
   }
-
   const getDate = (unix) => {
-    console.log("Saniye bu:",unix)
     const newDate = moment(unix * 1000).format()
-    console.log("new Date:",newDate)
     return newDate;  
   }
 
@@ -99,7 +93,7 @@ export default function Post() {
           dispatch(updatePosts(data))
         })
       })
-    }
+    } // eslint-disable-next-line
   },[post_url]);
 
   if (post && post.title && post.header_image && categories) { //&& post.categories
@@ -108,6 +102,9 @@ export default function Post() {
         <Content></Content>
       </>
     );
+  } else if (post === undefined) {
+      console.log("404")
+     return <NotFound></NotFound>;
   } else {
     return (
     'Loading Post...'
